@@ -1,0 +1,72 @@
+{
+  "created_utc": "2026-11-17 04:27",
+  "seed": 42,
+  "n_folds": 10,
+  "sep": " [SEP] ",
+  "pandas": "2.3.3",
+  "pairs": 601354,
+  "products": 482105,
+  "queries_per_split": {
+    "train": 18799,
+    "test": 8956,
+    "val": 2089
+  },
+  "pairs_per_split": {
+    "train": 378140,
+    "test": 181701,
+    "val": 41513
+  },
+  "pairs_per_fold": {
+    "0": 37834,
+    "1": 37826,
+    "2": 37809,
+    "3": 37810,
+    "4": 37800,
+    "5": 37808,
+    "6": 37826,
+    "7": 37804,
+    "8": 37818,
+    "9": 37805
+  },
+  "cleaning": {
+    "missing_raw": {
+      "title": 0.0,
+      "brand": 0.0564,
+      "color": 0.3218,
+      "bullets": 0.132,
+      "description": 0.4778
+    },
+    "missing_clean": {
+      "title": 0.0,
+      "brand": 0.0564,
+      "color": 0.3218,
+      "bullets": 0.132,
+      "description": 0.4779
+    },
+    "html_raw": {
+      "title": 0.0,
+      "brand": 0.0,
+      "color": 0.0,
+      "bullets": 0.0032,
+      "description": 0.2923
+    },
+    "html_clean": {
+      "title": 0.0,
+      "brand": 0.0,
+      "color": 0.0,
+      "bullets": 0.0,
+      "description": 0.0
+    }
+  },
+  "max_label_share_gap": 0.0094,
+  "same_title_label_conflicts": {
+    "test": {
+      "same_title_groups": 645,
+      "conflicting": 179
+    },
+    "train+val": {
+      "same_title_groups": 1301,
+      "conflicting": 322
+    }
+  }
+}

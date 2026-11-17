@@ -1,0 +1,64 @@
+{
+  "run": "b1_bm25_title",
+  "model": "BM25",
+  "k1": 1.2,
+  "b": 0.75,
+  "idf": "whole catalogue",
+  "tokenizer": "[a-z0-9]+(?:\\.[0-9]+)?",
+  "fields": "title",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-17 04:36",
+  "metrics": {
+    "val": {
+      "ndcg": 0.8162,
+      "ndcg_amazon": 0.7937,
+      "ndcg10": 0.6922,
+      "mrr_e": 0.7465,
+      "ndcg_ci95": [
+        0.8096,
+        0.8227
+      ],
+      "e_over_s": 0.6012,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.8209,
+      "ndcg_amazon": 0.7996,
+      "ndcg10": 0.6954,
+      "mrr_e": 0.7579,
+      "ndcg_ci95": [
+        0.8179,
+        0.824
+      ],
+      "e_over_s": 0.6103,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b0_random": {
+      "val": {
+        "diff": 0.074,
+        "ci95": [
+          0.0672,
+          0.0798
+        ],
+        "p_b_le_a": 0.0
+      },
+      "test": {
+        "diff": 0.075,
+        "ci95": [
+          0.0722,
+          0.0779
+        ],
+        "p_b_le_a": 0.0
+      }
+    }
+  }
+}

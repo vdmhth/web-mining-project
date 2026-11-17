@@ -1,0 +1,63 @@
+{
+  "run": "ce_minilm_zeroshot",
+  "mode": "full",
+  "model": "cross-encoder/ms-marco-MiniLM-L-12-v2",
+  "fields": "title",
+  "max_len": 128,
+  "fine_tuned": false,
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-17 05:53",
+  "metrics": {
+    "val": {
+      "ndcg": 0.833,
+      "ndcg_amazon": 0.8124,
+      "ndcg10": 0.7163,
+      "mrr_e": 0.7868,
+      "ndcg_ci95": [
+        0.827,
+        0.8388
+      ],
+      "e_over_s": 0.6262,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.834,
+      "ndcg_amazon": 0.8132,
+      "ndcg10": 0.7163,
+      "mrr_e": 0.7895,
+      "ndcg_ci95": [
+        0.8311,
+        0.8369
+      ],
+      "e_over_s": 0.6248,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b1_bm25_main": {
+      "val": {
+        "diff": 0.0103,
+        "ci95": [
+          0.0055,
+          0.0156
+        ],
+        "p_b_le_a": 0.0
+      },
+      "test": {
+        "diff": 0.0097,
+        "ci95": [
+          0.0072,
+          0.0122
+        ],
+        "p_b_le_a": 0.0
+      }
+    }
+  }
+}

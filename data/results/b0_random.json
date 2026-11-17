@@ -1,0 +1,39 @@
+{
+  "run": "b0_random",
+  "model": "constant score (random order)",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-17 04:35",
+  "metrics": {
+    "val": {
+      "ndcg": 0.7422,
+      "ndcg_amazon": 0.709,
+      "ndcg10": 0.5749,
+      "mrr_e": 0.6063,
+      "ndcg_ci95": [
+        0.7361,
+        0.7485
+      ],
+      "e_over_s": 0.5,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.7459,
+      "ndcg_amazon": 0.7133,
+      "ndcg10": 0.5763,
+      "mrr_e": 0.6087,
+      "ndcg_ci95": [
+        0.7429,
+        0.7491
+      ],
+      "e_over_s": 0.5,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  }
+}

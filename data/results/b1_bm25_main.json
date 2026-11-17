@@ -1,0 +1,64 @@
+{
+  "run": "b1_bm25_main",
+  "model": "BM25",
+  "k1": 1.2,
+  "b": 0.75,
+  "idf": "whole catalogue",
+  "tokenizer": "[a-z0-9]+(?:\\.[0-9]+)?",
+  "fields": "title + brand + color + bullets",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-17 04:36",
+  "metrics": {
+    "val": {
+      "ndcg": 0.8227,
+      "ndcg_amazon": 0.8025,
+      "ndcg10": 0.7041,
+      "mrr_e": 0.7568,
+      "ndcg_ci95": [
+        0.8165,
+        0.8293
+      ],
+      "e_over_s": 0.6189,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.8244,
+      "ndcg_amazon": 0.8046,
+      "ndcg10": 0.7012,
+      "mrr_e": 0.7595,
+      "ndcg_ci95": [
+        0.8209,
+        0.8275
+      ],
+      "e_over_s": 0.619,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b1_bm25_title": {
+      "val": {
+        "diff": 0.0066,
+        "ci95": [
+          0.0024,
+          0.0108
+        ],
+        "p_b_le_a": 0.0
+      },
+      "test": {
+        "diff": 0.0035,
+        "ci95": [
+          0.0014,
+          0.0054
+        ],
+        "p_b_le_a": 0.001
+      }
+    }
+  }
+}

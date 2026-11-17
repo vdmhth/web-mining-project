@@ -1,0 +1,7 @@
+# raw data kept locally in the repo root; results under data/ are tracked
+/*.parquet
+/*.csv
+/*.zip
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
