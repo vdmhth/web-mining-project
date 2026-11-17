@@ -72,7 +72,7 @@ Every step runs as a **Kaggle notebook** (CPU for data and BM25, GPU T4 with int
 
 ```text
 esci-raw ──► 01_preprocess ──► 02_bm25 ─────────────┐
-                 │                                   │
+                 │                                  │
                  ├──► 03_cross_encoder ──► 05_oof_lgbm ──► 06_report
                  └──► 04_biencoder ─────────────────┘
 ```
