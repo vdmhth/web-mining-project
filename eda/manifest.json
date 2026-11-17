@@ -1,0 +1,35 @@
+{
+  "data": {
+    "examples_us_small.parquet": "10e5f472aaf5ab42a9b4347beaedcc5af55556fbab4ba30593d19e1c601d2737",
+    "products_us_small.parquet": "659aa1175c25f7f0eabad4f5d7ebbc1b2ccd4986f8c0aef293258e6c8d649fd1",
+    "sources_us_small.csv": "b251d17dbcd48ff5406b70dc18bcba748eed96a19acf4199db01f250ef23f659"
+  },
+  "scripts": [
+    "eda/eda_analysis.py",
+    "eda/eda_audit.py",
+    "eda/common.py"
+  ],
+  "outputs": [
+    "eda/audit_stats.json",
+    "eda/eda_stats.json",
+    "eda/figures/a1_single_feature.png",
+    "eda/figures/f10_signals.png",
+    "eda/figures/f1_label_share.png",
+    "eda/figures/f2_candidates.png",
+    "eda/figures/f3_shareE.png",
+    "eda/figures/f4_label_by_qlen.png",
+    "eda/figures/f5_label_by_source.png",
+    "eda/figures/f6_overlap_by_label.png",
+    "eda/figures/f7_text_length.png",
+    "eda/figures/f8_metric_scale.png",
+    "eda/figures/f9_missing_by_label.png",
+    "eda/manifest.json",
+    "eda/tables/near_dup_pairs_train_test.csv",
+    "eda/tables/query_groups_val_proposal.csv",
+    "eda/tables/rule_check_color_queries.csv",
+    "eda/tables/rule_check_negation_queries.csv",
+    "eda/tables/rule_check_negation_titles.csv",
+    "eda/tables/single_feature_ranking.csv"
+  ],
+  "seed_val_proposal": 42
+}

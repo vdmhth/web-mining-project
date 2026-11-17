@@ -1,0 +1,172 @@
+qid_a,query_a,split_a,qid_b,query_b,split_b,jaccard,product_overlap,shared_products,label_agreement
+30,#20 paper bags without handle,train,77675,paper bags without handles,test,0.8,0.2,8,0.5
+42,#8 merchandising tags without string,test,44,#8 tags without string,train,0.8,0.3,12,0.3333333333333333
+94,$30 roblox gift card not digital,train,87981,roblox gift card not digital,test,0.833,0.3333333333333333,5,0.2
+132,'freeze dryer' machine not dehydrator,train,41911,food freeze dryer machine not dehydrator,test,0.833,0.3333333333333333,5,0.2
+132,'freeze dryer' machine not dehydrator,train,42526,freeze dryer machine not dehydrator,test,1.0,0.8,12,0.6666666666666666
+275,- hanging do not enter,test,293,- wood hanging do not enter,train,0.8,0.25,4,0.5
+296,-1 3/4'' center pop up drain without overflow,test,653,1 3/4'' center pop up drain without overflow,train,1.0,0.5,20,0.55
+331,.1 ml syringe without needle,train,661,1 50 ml syringe without needle,test,0.833,0.1875,3,0.3333333333333333
+440,0.5 cc syringe without needle,train,448,0.5 syringe without needle,test,0.8,0.5625,9,0.6666666666666666
+441,0.5 cc syringes without needle,train,448,0.5 syringe without needle,test,0.8,0.625,10,0.6
+445,0.5 ml syringe without needle,train,448,0.5 syringe without needle,test,0.8,0.5625,9,0.8888888888888888
+445,0.5 ml syringe without needle,train,451,0.5ml syringe without needle,test,1.0,0.75,12,0.8333333333333334
+448,0.5 syringe without needle,test,450,0.5cc syringe without needle,train,0.8,0.25,4,0.75
+536,06 chevy colorado driver side window regulator without motor,test,538,06 colorado driver side power window regulator without motor,train,0.8,0.6875,11,0.36363636363636365
+611,1 '' leather belts without buckles,train,620,1 1/2 leather belts without buckle,test,0.833,0.275,11,0.45454545454545453
+627,1 1/4 bathroom sink drain without overflow,train,638,1 1/4” sink drain without overflow,test,0.857,0.375,15,0.6
+633,1 1/4 sink drain without overflow,train,638,1 1/4” sink drain without overflow,test,1.0,0.275,11,0.6363636363636364
+633,1 1/4 sink drain without overflow,train,949,1-1/4” vessel sink drain without overflow,test,0.857,0.45,18,0.6666666666666666
+638,1 1/4” sink drain without overflow,test,947,1-1/4 vessel sink drain without overflow,train,0.857,0.075,3,0.3333333333333333
+661,1 50 ml syringe without needle,test,824,1 ml syringes without needles,train,0.833,0.0,0,
+661,1 50 ml syringe without needle,test,4641,50 ml syringe without needle,train,0.833,0.3125,5,0.4
+745,1 gallon ziplock bags the kind without the zip clip,test,746,1 gallon ziplock bags the king without the zip clip,train,0.8,0.9743589743589743,38,0.5263157894736842
+909,1 wine glasses without stems,train,111924,wine glasses without stem,test,0.8,0.225,9,0.8888888888888888
+918,1 year old girl toys,train,961,1-year old toys,test,0.8,0.2,3,0.6666666666666666
+947,1-1/4 vessel sink drain without overflow,train,949,1-1/4” vessel sink drain without overflow,test,1.0,0.675,27,0.5555555555555556
+1135,1/4 zip pullover women,test,112798,womens 1/4 zip pullover,train,1.0,0.1875,3,1.0
+1697,11 iphone pro screen protector,test,54486,iphone pro 11 max screen protector,train,0.833,0.125,2,0.0
+1751,110l laundry hamper without lid,train,60367,laundry hamper without lid,test,0.8,0.275,11,0.6363636363636364
+1783,11x14 frame without mat,test,42371,frame 11x14 without mat,train,1.0,0.46153846153846156,18,0.8888888888888888
+2743,2.5 hdd,train,2750,"2.5"" hdd",test,1.0,0.6875,11,1.0
+2920,22 gold chain for men,test,46366,gold chain for men,train,0.8,0.03125,1,1.0
+3074,25 dollar visa gift card,train,3088,25 visa gift cards,test,0.8,0.45454545454545453,5,0.4
+3247,2tb external hard drive xbox one,test,38787,external xbox one hard drive,train,0.833,0.375,6,0.5
+3247,2tb external hard drive xbox one,test,114287,xbox one external hard drive,train,0.833,0.5,8,0.625
+3250,2tb internal ssd hard drive,train,97309,ssd hard drive internal,test,0.8,0.125,2,0.5
+4353,4k gaming monitor,test,4365,4k monitor gaming,train,1.0,0.5,8,0.625
+4628,50 gallon water heater,test,37162,electric water heater 50 gallon,train,0.8,0.3125,5,0.6
+5126,7-8 year old boy toys,train,104607,toys 8 year old boy,test,0.833,0.0,0,
+5529,925 sterling silver necklace for women,train,72695,necklaces for women sterling silver,test,0.833,0.125,2,1.0
+5948,a10 phone case,test,5951,a10s phone case,train,1.0,0.0,0,
+6936,adult halloween costumes for men,test,48549,halloween costume for men,train,0.8,0.375,6,0.8333333333333334
+7585,airpods wireless charging case,test,7586,airpods with wireless charging case,train,0.8,0.25,4,0.75
+8086,all in one aquarium,train,10027,aquarium all in one,test,1.0,0.375,6,0.16666666666666666
+8107,all new amazon fire hd 10 tablet,test,8108,all new fire hd 10 tablet,train,0.857,0.125,2,0.5
+8442,always sunny in philadelphia,train,55111,its always sunny in philadelphia,test,0.8,0.25,4,1.0
+9362,answering machines without phone,test,59799,landline phones without answering machine,train,0.8,0.375,6,0.5
+9384,antenna for tv without cable outdoor,train,15133,best outdoor antenna for tv without cable,test,0.857,0.6,9,0.4444444444444444
+9665,apple charger,train,9669,apple chargers,test,1.0,0.8125,13,0.3076923076923077
+9690,apple earbuds,test,36378,earbuds apple,train,1.0,0.8125,13,0.8461538461538461
+9871,apple watch charger series 5,train,9907,apple watch series 5,test,0.8,0.0625,1,1.0
+9881,apple watch rose gold series 3,train,88623,rose gold series 3 apple watch,test,1.0,0.4375,7,0.7142857142857143
+11875,baby cribs with mattress included,test,30090,cribs with mattress included,train,0.8,0.375,6,0.5
+13156,barbie doll,test,13161,barbie dolls,train,1.0,0.3125,5,0.8
+14503,bed in a bag,test,26787,clearance bed in a bag,train,0.8,0.1875,3,1.0
+15069,best educational toys for 2 year old,train,36763,educational toys for 2 year olds,test,0.857,0.1875,3,1.0
+15152,best seller,train,15154,best sellers,test,1.0,0.03125,1,0.0
+15271,beverly hills bridal ring,train,15272,beverly hills bridal rings,test,1.0,0.375,15,0.8
+16380,black boho shirt plus size,test,81475,plus size black shirt,train,0.8,0.0,0,
+16652,black makeup vanity without mirror,test,65176,makeup vanity without mirror,train,0.8,0.0,0,
+17426,blue nursing shoes for women,train,74770,nursing shoes for women,test,0.8,0.06666666666666667,1,0.0
+18269,bong,test,18273,bongs,train,1.0,0.3,12,0.75
+18274,bongs and water pipes,train,93253,silicone bongs and water pipes,test,0.8,0.2222222222222222,2,1.0
+18650,bose noise cancelling earbuds,test,18660,bose sleep earbuds noise cancelling,train,0.8,0.1875,3,1.0
+19314,boys wallets for teens,train,109625,wallets for teen boys,test,1.0,0.6875,11,0.9090909090909091
+20332,buffalo bills hats women,train,20335,buffalo bills womens winter hat,test,0.8,0.3333333333333333,5,0.6
+21489,calcium supplement without d,train,21491,calcium supplements without vitamin d,test,0.8,0.425,17,0.4117647058823529
+21890,camera for computer without microphone,train,110364,web cameras for computers without microphone,test,0.833,0.3125,5,0.2
+21914,camera without wifi,train,21919,cameras without wifi,test,1.0,1.0,16,0.75
+23181,carhartt beanie womens,test,23208,carhartt womens beanie,train,1.0,0.4375,7,1.0
+24079,cbd oil not hemp,train,24080,cbd oil not hemp oil,test,1.0,0.9473684210526315,36,0.7222222222222222
+26792,clearance items under 5 dollars,test,55104,items under 5 dollars,train,0.8,0.0,0,
+28323,computer,test,28404,computers,train,1.0,0.46875,15,0.8
+28852,cooler small,train,94664,small cooler,test,1.0,0.5,8,0.5
+29079,corelle dinnerware set without mugs,train,33348,dinnerware sets without mugs,test,0.8,0.05,2,1.0
+30855,curtain rods for windows 66 to 120 white,train,111061,white curtain rods for windows 66 to 120,test,1.0,0.375,6,0.8333333333333334
+31027,cute iphone 7 phone case,train,79537,phone cases iphone 7,test,0.8,0.0,0,
+31062,cute room decor for teen girls,train,88428,room decor for teen girls,test,0.833,0.5625,9,0.6666666666666666
+31754,day of the dead costume,train,31755,day of the dead costume women,test,0.833,0.3125,5,0.6
+33100,dickies big and tall shirts,train,92629,shirts big and tall,test,0.8,0.0625,1,1.0
+33818,disney princess dresses for girls,train,83363,princess dresses for girls,test,0.8,0.125,2,0.5
+36385,earbuds samsung,test,90011,samsung earbuds,train,1.0,0.6,9,0.7777777777777778
+36599,echo dots kids,test,57787,kids echo dot,train,1.0,0.0625,1,0.0
+36734,edr3rxd1 whirlpool water filter,test,110892,whirlpool water filter edr3rxd1 replacement,train,0.8,0.6,9,0.5555555555555556
+38476,even a global pandemic could not stop me,train,38477,even a global pandemic could not stop me graduation,test,0.889,0.875,14,0.9285714285714286
+42524,freeze dryer for home use food not dehydrator,test,42525,freeze dryer machine for home use food not dehydrator,train,0.889,0.1875,3,0.6666666666666666
+43953,galaxy note 10 plus,test,43954,galaxy note 10 plus case,train,0.8,0.0,0,
+43953,galaxy note 10 plus,test,90084,samsung galaxy note 10 plus,train,0.8,0.125,2,1.0
+43954,galaxy note 10 plus case,train,74461,note 10 plus case,test,0.8,0.9375,15,0.9333333333333333
+44195,games for nintendo switch,test,44196,games for nintendo switch light,train,0.8,0.1875,3,0.6666666666666666
+44251,gaming headset without microphone pc,train,78323,pc headset without microphone,test,0.8,0.5,8,0.75
+44648,gauze tops for women plus size,test,104236,tops for women plus size,train,0.833,0.0,0,
+44786,gel press on nails,test,83169,press on gel nails bulk,train,0.8,0.25,4,0.5
+44851,generac generator with automatic transfer switch,train,44873,generator with automatic transfer switch,test,0.833,0.125,2,1.0
+44886,genesis sega,train,91539,sega genesis,test,1.0,0.625,10,0.8
+45517,girls backpack,test,45518,girls backpacks,train,1.0,0.1875,6,0.6666666666666666
+46069,glow in the dark,train,46071,glow in the dark chalk,test,0.8,0.0625,1,0.0
+46069,glow in the dark,train,46083,glow in the dark tee,test,0.8,0.0,0,
+46421,gold hoop earrings for women,test,46422,gold hoop earrings for women chunky,train,0.833,0.25,4,0.75
+46427,gold iphone 11 pro case,test,54052,iphone 11 pro case,train,0.8,0.0,0,
+46427,gold iphone 11 pro case,test,54060,iphone 11 pro cases,train,0.8,0.0,0,
+46674,good halloween costumes for boys,train,48553,halloween costumes for boys,test,0.8,0.125,2,1.0
+47862,gucci handbags for women,train,47863,gucci handbags for women replicas,test,0.8,0.0625,1,1.0
+49003,hang on wall without nails,test,49004,hang pictures on wall without nails,train,0.833,0.575,23,0.9130434782608695
+51176,honeywell outdoor ceiling fan without light,train,76542,outdoor ceiling fan without light,test,0.833,0.25,10,0.5
+51176,honeywell outdoor ceiling fan without light,train,76544,outdoor ceiling fans without light,test,0.833,0.225,9,0.4444444444444444
+51214,hoodie white and black,train,51216,hoodies black and white,test,1.0,0.625,25,0.92
+51947,huggies diapers overnight size 4,train,51950,huggies overnight size 4,test,0.8,0.5555555555555556,5,0.8
+52526,i12 tws,train,106185,tws i12,test,1.0,0.4375,7,0.5714285714285714
+53127,industrial polarized sunglasses for men,test,81860,polarized sunglasses for men,train,0.8,0.14285714285714285,4,1.0
+54035,iphone 11 max pro,train,54092,iphone 11 pro max phone,test,0.8,0.1875,3,1.0
+54039,iphone 11 max screen protector,test,54486,iphone pro 11 max screen protector,train,0.833,0.5,8,0.75
+54052,iphone 11 pro case,train,54053,iphone 11 pro case burgundy,test,0.8,0.0625,1,1.0
+54052,iphone 11 pro case,train,54057,iphone 11 pro case ring,test,0.8,0.0,0,
+54052,iphone 11 pro case,train,54062,iphone 11 pro gucci case,test,0.8,0.0,0,
+54053,iphone 11 pro case burgundy,test,54060,iphone 11 pro cases,train,0.8,0.0,0,
+54057,iphone 11 pro case ring,test,54060,iphone 11 pro cases,train,0.8,0.0,0,
+54060,iphone 11 pro cases,train,54062,iphone 11 pro gucci case,test,0.8,0.0,0,
+54066,iphone 11 pro max,train,54092,iphone 11 pro max phone,test,0.8,0.5625,9,1.0
+54307,iphone 8 case rubber silicone,test,54369,iphone 8 silicone case,train,0.8,0.4375,7,1.0
+54325,iphone 8 phone case,test,79507,phone case iphone 8,train,1.0,0.0,0,
+54470,iphone lifeproof case 8,train,62178,lifeproof iphone 8 plus case,test,0.8,0.1875,3,0.3333333333333333
+54551,iphone x max case for women,test,54553,iphone x max wallet case for women,train,0.857,0.0,0,
+54558,iphone x refurbished,test,86718,refurbished iphone x,train,1.0,0.25,4,0.25
+54649,iphone xs max cases,test,104877,transformers iphone xs max cases,train,0.8,0.0,0,
+55316,jack reacher without fail,test,55317,jack reacher without fail paperback,train,0.8,0.1875,3,1.0
+55454,jansport big student backpack,test,55455,jansport big student backpack black,train,0.8,0.3125,5,0.8
+56098,jogger pants for men,test,94135,skinny joggers pants for men,train,0.8,0.0,0,
+58325,king platform bed without headboard,test,81173,platform bed without headboard,train,0.8,0.15384615384615385,6,0.6666666666666666
+58861,knife sets without block,test,114116,wusthof knife set without block,train,0.8,0.05,2,1.0
+59513,lacoste shirts for men,test,59514,lacoste shirts for men shoes,train,0.8,0.125,2,0.0
+63486,long men underwear,test,63603,long underwear mens,train,1.0,0.0625,1,1.0
+67251,men swim trunks without mesh lining,test,67947,mens swim trunks without mesh lining,train,1.0,0.625,25,0.64
+67402,mens 1/4 zip pullover,test,67502,mens camo 1/4 zip pullover,train,0.833,0.0,0,
+67763,mens nike sneakers,test,67898,mens sneaker nike,train,1.0,0.0625,1,1.0
+68197,merrill women sandals size 9,train,113212,womens sandals size 9,test,0.8,0.0625,1,1.0
+69312,mini bike,test,69315,mini bikes,train,1.0,0.2,3,0.6666666666666666
+69506,mini refrigerator without freezer,train,69507,mini refrigerators without freezer,test,1.0,1.0,16,0.6875
+70285,mom jeans high waisted,train,70286,mom jeans high waisted vintage,test,0.8,0.08,2,0.5
+70411,monk fruit sweetener without erythritol,test,70413,monk fruit without erythritol,train,0.8,0.65,26,0.5769230769230769
+70451,monokini plus size swimsuits for women,train,99856,swimsuits for women plus size,test,0.833,0.0,0,
+71582,multivitamin without vitamin k,train,71585,multivitamins without vitamin k,test,1.0,0.75,30,0.7333333333333333
+72373,natural sleep aid without melatonin,train,72374,natural sleep aids without melatonin,test,1.0,1.0,39,0.717948717948718
+72815,neon shoes for women heels and pumps,train,92748,shoes for women heels and pumps,test,0.857,0.0,0,
+74124,"no, pepsi is not ok",test,78931,pepsi is not ok,train,0.8,0.5714285714285714,8,0.875
+74506,note cards without envelopes,train,80802,plain note cards without envelopes,test,0.8,0.75,30,0.3
+75681,one wheel pint,test,80380,pint one wheel,train,1.0,0.5,8,0.25
+76542,outdoor ceiling fan without light,test,76543,outdoor ceiling fan without lights,train,1.0,0.7692307692307693,30,0.7333333333333333
+76543,outdoor ceiling fan without lights,train,76578,outdoor fans without lights,test,0.8,0.28205128205128205,11,0.8181818181818182
+76862,overall for women shorts,train,76863,overall shorts for women,test,1.0,0.4375,7,0.7142857142857143
+79038,periwinkle phone case iphone 7,train,79537,phone cases iphone 7,test,0.8,0.25,4,0.25
+80337,pink throw pillow not cover,test,102922,throw pillows not covers,train,0.8,0.125,2,0.0
+80471,pipe,train,80481,pipes,test,1.0,0.4375,7,0.7142857142857143
+80923,plantar fasciitis shoes for women,train,113241,womens shoes for plantar fasciitis,test,1.0,0.4375,7,0.14285714285714285
+81129,plastic wine glasses without stem,train,111924,wine glasses without stem,test,0.8,0.45,18,0.6666666666666666
+81545,plus size pants rompers for women,test,88380,rompers for women plus size,train,0.833,0.0,0,
+81571,plus size swimsuits for women,train,99856,swimsuits for women plus size,test,1.0,0.25,4,0.5
+83260,pride mobility scooter,test,83261,pride mobility scooters,train,1.0,0.6,24,0.625
+87749,ring light without stand,test,87750,ring light without stand 18,train,0.8,0.4375,7,0.42857142857142855
+90098,samsung galaxy note 9 cases,train,90230,samsung note 9 case,test,0.8,0.6428571428571429,9,0.4444444444444444
+96296,sound bars for tv,train,96297,sound bars for tv samsung,test,0.8,0.0625,1,1.0
+99135,sun dresses for wedding guest women,test,112956,womens dresses for wedding guest,train,0.833,0.0625,1,0.0
+99902,switch blade,test,99903,switch blades,train,1.0,0.0,0,
+102274,the one for whom food is not enough by amanda gorman,train,102275,the one for whom food is not enough gorman,test,0.818,0.2,8,0.75
+105964,tv stand for 65 inch tv,test,105965,tv stand for 65 inch tv white,train,0.833,0.0625,1,1.0
+106050,twin bed without headboard,test,106078,twin platform bed without headboard,train,0.8,0.5,20,0.75
+107907,vape,test,107922,vapes,train,1.0,0.3125,5,0.4
+110578,weighted blanket without beads,train,110579,weighted blanket without glass beads,test,0.8,0.525,21,0.47619047619047616
+112116,wired router gigabit without wifi,test,112117,wired router without wifi,train,0.8,0.375,6,0.8333333333333334
+112765,women's sandals size 9,train,113212,womens sandals size 9,test,0.8,0.4375,7,0.7142857142857143
+112783,women's sweatshirts without hoods,train,113321,womens sweatshirts without hoods,test,0.8,0.20512820512820512,8,0.875
+114395,xiaomi mi 9t pro,test,114397,xiaomi mi 9t pro white,train,0.8,0.3125,5,1.0

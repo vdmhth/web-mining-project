@@ -1,0 +1,22 @@
+feature,group,description,direction,ndcg_train,gain_vs_random_train,e_over_s_train,ndcg_val,gain_vs_random_val,e_over_s_val,val_minus_train
+bm25_title,relevance,BM25 on title,+,0.8183,0.0738,0.6087,0.8162,0.074,0.6012,0.0002
+overlap_title,relevance,Share of query words found in title,+,0.8097,0.0652,0.5956,0.8099,0.0677,0.5896,0.0025
+overlap_main,relevance,Share of query words found in title+brand+color+bullets,+,0.813,0.0685,0.6039,0.815,0.0728,0.6029,0.0043
+num_match,relevance,All numbers in the query appear in the title,+,0.7599,0.0154,0.5331,0.7583,0.0161,0.536,0.0007
+color_match,relevance,Query color matches product color,+,0.7484,0.0039,0.5151,0.7462,0.004,0.514,0.0001
+brand_in_query,relevance,Product brand appears in the query,+,0.7537,0.0092,0.5228,0.7514,0.0092,0.5197,0.0
+neg_term_in_title,relevance,Title contains the negated term (raw rule),+,0.7453,0.0008,0.4936,0.7433,0.0011,0.4948,0.0003
+neg_violation_refined,relevance,Title contains the negated term (refined rule),−,0.7459,0.0014,0.5114,0.7434,0.0012,0.5109,-0.0002
+top_brand,list,Most frequent brand in the list,+,0.7601,0.0156,0.5382,0.7583,0.0161,0.5316,0.0005
+brand_share,list,Share of candidates with the same brand,+,0.7616,0.0171,0.5439,0.7602,0.018,0.5406,0.0009
+title_words,product,Number of words in title,−,0.7528,0.0083,0.5289,0.75,0.0078,0.5275,-0.0005
+bullet_words,product,Number of words in bullet points,−,0.7576,0.0131,0.5355,0.7541,0.0119,0.5331,-0.0012
+miss_bullet_point,product,Bullet points missing,+,0.751,0.0065,0.5078,0.7497,0.0075,0.5082,0.001
+miss_brand,product,Brand missing,+,0.745,0.0005,0.5012,0.7414,-0.0008,0.501,-0.0013
+miss_color,product,Color missing,+,0.7483,0.0038,0.5093,0.746,0.0038,0.5081,0.0
+miss_description,product,Description missing,−,0.7477,0.0032,0.5091,0.7456,0.0034,0.5006,0.0002
+html_in_description,artifact,Description contains HTML,−,0.7458,0.0013,0.5055,0.7422,-0.0,0.5086,-0.0013
+product_prior,artifact,Mean gain of the product in other queries (product memorization),+,0.7488,0.0043,0.5274,0.743,0.0008,0.5191,-0.0035
+catalog_pos,artifact,Row position in the products file,−,0.7517,0.0072,0.5309,0.7472,0.005,0.5267,-0.0022
+isbn_like_id,artifact,ISBN-like product_id (starts with a digit),−,0.7446,0.0001,0.5001,0.7417,-0.0005,0.4995,-0.0006
+n_cand,artifact,Number of candidates of the query (constant within a query),+,0.7445,0.0,0.5,0.7422,-0.0,0.5,-0.0

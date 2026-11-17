@@ -38,12 +38,14 @@ Status: **done** = in the repository; **planned** = to be added as the project p
 ├── README.md
 ├── proposal/                      project proposal                               done
 ├── eda/                           exploratory analysis, frozen                               done
-│   ├── eda_analysis.py, eda_audit.py, common.py
-│   ├── eda_report.pdf, eda_report_en.pdf
-│   ├── eda_stats.json, audit_stats.json, manifest.json (SHA-256 of the data files)
-│   ├── figures/
-│   └── tables/                    single-feature ranking, near-duplicate queries, rule checks,
-│                                  query_groups_val_proposal.csv (validation split)
+│   ├── eda_audit.py, common.py    builds the validation split and the tables below
+│   ├── manifest.json              SHA-256 of the raw data files
+│   ├── figures/                   label shares, list sizes, text length, missing fields, signals
+│   └── tables/
+│       ├── query_groups_val_proposal.csv   validation split (input of 1-preprocess)
+│       ├── near_dup_pairs_train_test.csv   near-duplicate train/test queries (memorization check)
+│       ├── single_feature_ranking.csv      nDCG of each feature used alone (Direction 3 features)
+│       └── rule_check_*.csv                hand-checked samples of the negation and color rules
 ├── src/                           shared code, imported by every notebook                    done
 │   ├── evaluation.py              nDCG (both gain mappings), nDCG@10, MRR, E-over-S, bootstrap,
 │   │                              RunLog (writes <run>.json + scores)
@@ -54,7 +56,7 @@ Status: **done** = in the repository; **planned** = to be added as the project p
 ├── notebooks/                     run on Kaggle, one notebook per experiment
 │   ├── 1-preprocess.ipynb        clean, join, split                                         done
 │   ├── 2-bm25.ipynb              B0 random, B1 BM25                                         done
-│   ├── 3-cross_encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)                       done
+│   ├── 3-cross-encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)                       done
 │   ├── 4-biencoder.ipynb         B2 (GPU)                                                   planned
 │   ├── 5-oof_lgbm.ipynb          out-of-fold scores + LightGBM re-ranker (Direction 3)      planned
 │   └── 6-report.ipynb            result tables, significance tests, error analysis          planned
@@ -129,7 +131,7 @@ These rules apply to every experiment so that results stay comparable.
 | Amazon MiniLM cross-encoder (paper, test) | 0.857 |
 | All Exact items first (test) | 0.997 |
 
-The BM25 score in the ESCI paper (0.675) is below random order on the candidate lists, so it is not used as a reference. See section 6 of the EDA report.
+The BM25 score in the ESCI paper (0.675) is below random order on the candidate lists, so it is not used as a reference.
 
 ## Baseline results
 
