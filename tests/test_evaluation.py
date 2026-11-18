@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.evaluation import GAINS, e_over_s, query_metrics, summarize   # noqa: E402
+from src.evaluation import GAINS, RunLog, e_over_s, query_metrics, summarize   # noqa: E402
 from src.text import clean_bullets, clean_text, product_text   # noqa: E402
 
 
@@ -66,6 +66,27 @@ def test_all_irrelevant_query_skipped():
 def test_e_over_s_ties_half():
     df = make_df([(1, 'E'), (1, 'S'), (1, 'S')])
     assert e_over_s(df, [1.0, 1.0, 0.0]) == 0.75
+
+
+def test_runlog_writes_json_and_scores(tmp_path=None):
+    import importlib.util
+    import json
+    import tempfile
+    if importlib.util.find_spec('pyarrow') is None and importlib.util.find_spec('fastparquet') is None:
+        print('skip: no parquet engine (pyarrow) in this environment; runs on Kaggle')
+        return
+    tmp = Path(tmp_path or tempfile.mkdtemp())
+    df = random_lists(50).assign(example_id=lambda d: range(len(d)))
+    log = RunLog(tmp, {'val': df})
+    gain = df['esci_label'].map(GAINS['official']).to_numpy()
+    log.log('oracle', {'val': gain}, {'model': 'oracle'})
+    log.log('flat', {'val': np.zeros(len(df))}, {'model': 'flat'}, compare_to='oracle')
+    rec = json.loads((tmp / 'flat.json').read_text(encoding='utf-8'))
+    assert len(rec['src_version']['files_sha1']) == 10 and 'pandas' in rec['env']
+    assert rec['paired_vs']['oracle']['val']['diff'] < 0
+    sc = pd.read_parquet(tmp / 'scores' / 'oracle_val.parquet')
+    assert list(sc.columns) == ['example_id', 'query_id', 'score'] and len(sc) == len(df)
+    assert log.table().loc[('val', 'oracle'), 'ndcg'] == 1.0
 
 
 def test_text():

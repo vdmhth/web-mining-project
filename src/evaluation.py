@@ -5,7 +5,10 @@ Do not change a metric here without re-scoring every saved run (`data/results/sc
 The functions were moved unchanged from notebooks 02_bm25 and 03_cross_encoder.
 """
 import glob
+import hashlib
 import json
+import platform
+import sys
 import time
 from pathlib import Path
 
@@ -112,12 +115,31 @@ def summarize(df, score):
     return s, pq
 
 
+def src_version():
+    """Hash of the src/*.py files, saved in every run's json: two runs with the same value ran the same code.
+
+    Line endings are normalised, so the Windows copy and the Kaggle copy of the same code give the same hash.
+    """
+    src = Path(__file__).resolve().parent
+    code = b''.join(f.read_bytes().replace(b'\r\n', b'\n') for f in sorted(src.glob('*.py')))
+    return {'files_sha1': hashlib.sha1(code).hexdigest()[:10]}
+
+
+def env_versions():
+    """Python and library versions; torch and transformers only if the notebook imported them."""
+    out = {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__}
+    for lib in ('torch', 'transformers', 'lightgbm'):
+        if lib in sys.modules:
+            out[lib] = sys.modules[lib].__version__
+    return out
+
+
 class RunLog:
     """Scores runs and writes `<res_dir>/<run>.json` and `<res_dir>/scores/<run>_<split>.parquet`.
 
     parts: {split: DataFrame with example_id, query_id, esci_label}. The scores given to `log` for a split must be
     in the row order of parts[split]. Every notebook that produces scores uses this format, so the report
-    notebook can read them all.
+    notebook can read them all. Each json also records `src_version` and `env` (library versions).
     """
 
     def __init__(self, res_dir, parts):
@@ -125,11 +147,13 @@ class RunLog:
         (self.res / 'scores').mkdir(parents=True, exist_ok=True)
         self.parts = parts
         self.records, self.per_query = {}, {}
+        self.version = src_version()
 
     def log(self, name, scores, info, compare_to=None):
         # scores: {split: array}; compare_to: an earlier run (logged or loaded) for a paired bootstrap on nDCG
         rec = {'run': name, **info, 'tie_seeds': list(TIE_SEEDS), 'bootstrap': 1000,
-               'created_utc': time.strftime('%Y-%m-%d %H:%M', time.gmtime()), 'metrics': {}}
+               'created_utc': time.strftime('%Y-%m-%d %H:%M', time.gmtime()),
+               'src_version': self.version, 'env': env_versions(), 'metrics': {}}
         self.per_query[name] = {}
         for split, sc in scores.items():
             part = self.parts[split]

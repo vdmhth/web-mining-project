@@ -1,5 +1,5 @@
 {
-  "run": "ce_minilm_zeroshot",
+  "run": "b3_minilm_title_zeroshot",
   "mode": "full",
   "model": "cross-encoder/ms-marco-MiniLM-L-12-v2",
   "fields": "title",

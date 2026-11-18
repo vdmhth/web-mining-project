@@ -15,7 +15,7 @@ Given a query and its list of candidate products, rank the candidates so that re
 | Direction 2 | Training objectives for graded labels: MSE on gains, 4-class cross-entropy → expected gain, ListNet |
 | Direction 3 | LightGBM re-ranker on out-of-fold cross-encoder scores plus list-level and lexical features |
 
-Details: `proposal/proposal.tex` (proposal), `ke_hoach_du_an.md` (team plan, in Vietnamese).
+Details: `proposal/proposal.tex`.
 
 ## Data
 
@@ -27,43 +27,38 @@ Details: `proposal/proposal.tex` (proposal), `ke_hoach_du_an.md` (team plan, in 
 
 Train: 20,888 queries / 419,653 pairs. Test: 8,956 queries / 181,701 pairs. Source: [amazon-science/esci-data](https://github.com/amazon-science/esci-data) (Apache-2.0).
 
-The data files are **not stored in this repository**. They are kept in a private Kaggle dataset (`esci-raw`) and, locally, in the repository root (ignored by git).
+The data files are **not stored in this repository**. They are kept in a private Kaggle dataset (`esci-raw`) and, locally, in the folder that contains the repository.
 
 ## Repository layout
-
-Status: **done** = in the repository; **planned** = to be added as the project progresses.
 
 ```text
 .
 ├── README.md
-├── proposal/                      project proposal                               done
-├── eda/                           exploratory analysis, frozen                               done
+├── proposal/proposal.tex          project proposal (LaTeX)
+├── eda/                           exploratory analysis, frozen
 │   ├── eda_audit.py, common.py    builds the validation split and the tables below
 │   ├── manifest.json              SHA-256 of the raw data files
 │   ├── figures/                   label shares, list sizes, text length, missing fields, signals
 │   └── tables/
-│       ├── query_groups_val_proposal.csv   validation split (input of 1-preprocess)
+│       ├── query_groups_val_proposal.csv   validation split (input of 01_preprocess)
 │       ├── near_dup_pairs_train_test.csv   near-duplicate train/test queries (memorization check)
-│       ├── single_feature_ranking.csv      nDCG of each feature used alone (Direction 3 features)
+│       ├── single_feature_ranking.csv      nDCG of each feature used alone
 │       └── rule_check_*.csv                hand-checked samples of the negation and color rules
-├── src/                           shared code, imported by every notebook                    done
+├── src/                           shared code, imported by every notebook
 │   ├── evaluation.py              nDCG (both gain mappings), nDCG@10, MRR, E-over-S, bootstrap,
 │   │                              RunLog (writes <run>.json + scores)
 │   ├── text.py                    field cleaning, product text presets
 │   ├── cross_encoder.py           training loop, prediction, losses
-│   └── data.py                    find() for Kaggle inputs
-├── tests/test_evaluation.py       metric and text checks on hand-made data                   done
+│   ├── features.py                BM25 (baseline B1, Direction 3 features)
+│   └── data.py                    find(), load_pairs(fields): outputs of 01_preprocess
+├── tests/test_evaluation.py       metric and text checks on hand-made data
 ├── notebooks/                     run on Kaggle, one notebook per experiment
-│   ├── 1-preprocess.ipynb        clean, join, split                                         done
-│   ├── 2-bm25.ipynb              B0 random, B1 BM25                                         done
-│   ├── 3-cross-encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)                       done
-│   ├── 4-biencoder.ipynb         B2 (GPU)                                                   planned
-│   ├── 5-oof_lgbm.ipynb          out-of-fold scores + LightGBM re-ranker (Direction 3)      planned
-│   └── 6-report.ipynb            result tables, significance tests, error analysis          planned
+│   ├── 01_preprocess.ipynb        clean, join, split
+│   ├── 02_bm25.ipynb              B0 random, B1 BM25
+│   └── 03_cross_encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)
 └── data/                          small outputs only; large files stay on Kaggle
-    ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv   done
-    ├── results/                   <run>.json + scores/<run>_{val,test}.parquet               done
-    └── tables/                    tables for the report (baseline_table.csv, ...)            planned
+    ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv
+    └── results/                   <run>.json + scores/<run>_{val,test}.parquet
 ```
 
 ## Workflow
@@ -83,25 +78,27 @@ esci-raw ──► 01_preprocess ──► 02_bm25 ─────────�
 | `pairs.parquet`, `products_clean.parquet` | Output of `01_preprocess` on Kaggle (can be rebuilt) | no |
 | Split manifest, data checks | `data/splits/` | yes |
 | Run metrics and per-pair scores | `data/results/` | yes |
-| Report tables | `data/tables/` | yes |
 
 ### Shared code (`src/`)
 
-Notebooks hold the experiment (config, calls, tables, comments). Anything used by more than one notebook lives in `src/`: above all the evaluation, so every run is scored by the same code. The first cell of each notebook makes `src/` importable on Kaggle:
+Notebooks hold the experiment (config, calls, tables, comments). Anything used by more than one notebook lives in `src/`: above all the evaluation, so every run is scored by the same code. `src/` reaches Kaggle as a private dataset **`wm-src`**; the first cell of each notebook finds it under `/kaggle/input` and makes it importable. After changing `src/`, zip it from the repo root:
 
-1. if a Kaggle dataset containing the repo is attached, it is used;
-2. otherwise the repo is cloned into `/tmp` (needs *Internet on*; while the repo is private, add a Kaggle secret `GITHUB_TOKEN`).
+```powershell
+tar -a -c -f ..\wm-src.zip --exclude=__pycache__ src
+```
 
-The commit of `src/` is saved in every run's json (`src_version`). Rules:
+Then upload `wm-src.zip` as a new version of the Kaggle dataset `wm-src`, and in the notebook click *Update* on that input.
+
+Every run's json records `src_version.files_sha1` (a hash of `src/*.py`; two runs with the same value ran the same code) and `env` (Python and library versions). Rules:
 
 - Do not edit `src/evaluation.py` without re-scoring the saved runs. `tests/test_evaluation.py` must pass (`python tests/test_evaluation.py`).
 - A new loss goes into `compute_loss` in `src/cross_encoder.py`; a new experiment gets its own notebook, not new cells in someone else's.
-- Push changes to `src/` before running the notebook that needs them.
+- Rebuild and upload `wm-src` before running a notebook that needs a change in `src/`.
 
 ### Running a notebook on Kaggle
 
 1. Raw data: a private dataset `esci-raw` with the three data files and `eda/tables/query_groups_val_proposal.csv`.
-2. *File → Import Notebook*, then add the inputs listed in the notebook's first cell (`esci-raw` or *Notebook Output* of an earlier notebook). CPU for 01 and 02, GPU T4 for 03. *Internet on*.
+2. *File → Import Notebook*, then add the inputs listed in the notebook's first cell: always `wm-src`, plus `esci-raw` or the *Notebook Output* of an earlier notebook. CPU for 01 and 02, GPU T4 with *Internet on* for 03 (Hugging Face models).
 3. *Run All*, check the printed checks, then *Save Version → Save & Run All*.
 4. Download the small outputs into `data/splits/` or `data/results/` and push them.
 
@@ -120,7 +117,8 @@ These rules apply to every experiment so that results stay comparable.
 | Text cleaning | Light: HTML removed, NFC, whitespace collapsed. Case, digits, units and punctuation kept. |
 | Product text | Presets `title`, `title_bc`, `main` (+ bullets), `all` (+ description); format `title [SEP] brand: X [SEP] color: Y [SEP] bullets`; missing fields dropped. |
 | Banned features | Catalogue row position, `product_id` patterns, `small_version` / `large_version`, the product's labels in other queries. |
-| Run names | `<model>_<fields>[_<loss>]_s<seed>`, e.g. `bm25_title`, `ce-minilm-l12_title_mse_s42`. |
+| Run names | `<stage>_<model>[_<fields>][_<loss>][_s<seed>]`, lower case with `_`; stage is `b0`–`b3` or `d1`–`d3`. E.g. `b1_bm25_title`, `b3_minilm_title_zeroshot`, `b3_minilm_title_mse_s42`. |
+| Notebook names | `NN_<topic>.ipynb` (two-digit number, `_`), e.g. `03_cross_encoder.ipynb`. |
 
 ## Reference numbers
 
