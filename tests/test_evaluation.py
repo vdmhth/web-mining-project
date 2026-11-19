@@ -87,6 +87,21 @@ def test_runlog_writes_json_and_scores(tmp_path=None):
     sc = pd.read_parquet(tmp / 'scores' / 'oracle_val.parquet')
     assert list(sc.columns) == ['example_id', 'query_id', 'score'] and len(sc) == len(df)
     assert log.table().loc[('val', 'oracle'), 'ndcg'] == 1.0
+    # a blind split is saved as scores but gets no metrics
+    log2 = RunLog(tmp, {'val': df, 'test': df})
+    log2.log('blind', {'val': gain, 'test': gain}, {}, blind=('test',))
+    rec = json.loads((tmp / 'blind.json').read_text(encoding='utf-8'))
+    assert list(rec['metrics']) == ['val'] and rec['blind_splits'] == ['test']
+    assert (tmp / 'scores' / 'blind_test.parquet').exists()
+    # extra columns (ce4 probabilities) are saved next to the score, row-aligned, even with a non-default index
+    sub = df.iloc[10:].copy()
+    probs = pd.DataFrame({'p_E': np.arange(len(sub)) / len(sub), 'p_I': 0.5})
+    log3 = RunLog(tmp, {'val': sub})
+    log3.log('probs', {'val': gain[10:]}, {}, extra={'val': probs})
+    sc = pd.read_parquet(tmp / 'scores' / 'probs_val.parquet')
+    assert list(sc.columns) == ['example_id', 'query_id', 'score', 'p_E', 'p_I']
+    assert (sc['example_id'].to_numpy() == sub['example_id'].to_numpy()).all()
+    assert np.allclose(sc['p_E'], probs['p_E'])
 
 
 def test_text():

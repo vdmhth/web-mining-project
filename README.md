@@ -55,7 +55,11 @@ The data files are **not stored in this repository**. They are kept in a private
 ├── notebooks/                     run on Kaggle, one notebook per experiment
 │   ├── 01_preprocess.ipynb        clean, join, split
 │   ├── 02_bm25.ipynb              B0 random, B1 BM25
-│   └── 03_cross_encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)
+│   ├── 03_cross_encoder.ipynb     B3 (Amazon MiniLM reproduction, GPU)
+│   ├── 04_biencoder.ipynb         B2 (zero-shot bi-encoders, GPU) + features for Direction 3
+│   ├── 05_d1_input_backbone.ipynb Direction 1: title_bc / main input, DeBERTa-v3-base (GPU)
+│   ├── 06_d2_losses.ipynb         Direction 2: MSE vs 4-class CE vs ListNet (MiniLM title; ce4 on DeBERTa main)
+│   └── 07_oof.ipynb               Direction 3 input: 5-fold out-of-fold DeBERTa main ce4 scores + p_E..p_I (GPU)
 └── data/                          small outputs only; large files stay on Kaggle
     ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv
     └── results/                   <run>.json + scores/<run>_{val,test}.parquet
@@ -66,11 +70,13 @@ The data files are **not stored in this repository**. They are kept in a private
 Every step runs as a **Kaggle notebook** (CPU for data and BM25, GPU T4 with internet for transformers). Notebooks are chained on Kaggle with *Add Input → Notebook Output*, so large intermediate files never leave Kaggle.
 
 ```text
-esci-raw ──► 01_preprocess ──► 02_bm25 ─────────────┐
-                 │                                  │
-                 ├──► 03_cross_encoder ──► 05_oof_lgbm ──► 06_report
-                 └──► 04_biencoder ─────────────────┘
+esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ─────────────────────────┐
+                            ├─► 03_cross_encoder (B3)                 │
+                            ├─► 04_biencoder (B2) ────────────────────┤
+                            └─► 05_d1, 06_d2 ──► 07_oof ──► 08_features ──► 09_lgbm ──► 10_report
 ```
+
+05 and 06 choose the cross-encoder configuration on val; 07 trains it once per fold; 08–10 are planned.
 
 | Output | Where it lives | In git |
 | --- | --- | :---: |
@@ -78,13 +84,14 @@ esci-raw ──► 01_preprocess ──► 02_bm25 ─────────�
 | `pairs.parquet`, `products_clean.parquet` | Output of `01_preprocess` on Kaggle (can be rebuilt) | no |
 | Split manifest, data checks | `data/splits/` | yes |
 | Run metrics and per-pair scores | `data/results/` | yes |
+| Out-of-fold scores of 07 (`oof_*` fold files, `oof/ce_*.parquet`, ~70 MB) | Output of `07_oof` on Kaggle; local copy in `../kaggle_outputs/` | no |
 
 ### Shared code (`src/`)
 
-Notebooks hold the experiment (config, calls, tables, comments). Anything used by more than one notebook lives in `src/`: above all the evaluation, so every run is scored by the same code. `src/` reaches Kaggle as a private dataset **`wm-src`**; the first cell of each notebook finds it under `/kaggle/input` and makes it importable. After changing `src/`, zip it from the repo root:
+Notebooks hold the experiment (config, calls, tables, comments). Anything used by more than one notebook lives in `src/`: above all the evaluation, so every run is scored by the same code. `src/` (and `data/results/`, the saved runs that later notebooks compare with) reaches Kaggle as a private dataset **`wm-src`**; the first cell of each notebook finds it under `/kaggle/input` and makes it importable. After changing `src/`, zip it from the repo root:
 
 ```powershell
-tar -a -c -f ..\wm-src.zip --exclude=__pycache__ src
+tar -a -c -f ..\wm-src.zip --exclude=__pycache__ src data/results
 ```
 
 Then upload `wm-src.zip` as a new version of the Kaggle dataset `wm-src`, and in the notebook click *Update* on that input.
@@ -109,8 +116,9 @@ These rules apply to every experiment so that results stay comparable.
 | Topic | Rule |
 | --- | --- |
 | Validation split | 10% of training queries (2,089), grouped by near-duplicate query (`dup_group`), seed 42. Taken from `eda/tables/query_groups_val_proposal.csv`. |
-| Folds | `fold10` (0–9) on the remaining 18,799 training queries, assigned by `dup_group`. 2 folds = `fold10 // 5`, 5 folds = `fold10 // 2`. |
-| Model selection | On validation only. The test split is scored once per final configuration. |
+| Folds | `fold10` (0–9) on the remaining 18,799 training queries, assigned by `dup_group`. Out-of-fold scores for Direction 3 use **5 folds** (`fold10 // 2`): each fold model trains on 80% of train, and val/test scores are the mean of the 5 fold models. |
+| `max_len` | 128 for `title` / `title_bc`; 256 for `main` (MiniLM and DeBERTa), which truncates about 21% of products (bullets only, the title comes first). |
+| Model selection | On validation only. From Direction 1 on, test scores are saved blind (`RunLog.log(..., blind=('test',))`) and scored once in `10_report` for the final configurations. |
 | Metrics | nDCG (main), nDCG@10, MRR of the first Exact item, E-over-S pair accuracy. Ties broken at random, averaged over 3 seeds. |
 | Gains | Official (E 1, S 0.1, C 0.01, I 0). Amazon's script swaps S and C; `ndcg_amazon` keeps that mapping for reference only. The published 0.857 matches the official gains (B3 below). |
 | Significance | Paired bootstrap / Wilcoxon on per-query nDCG. |
@@ -143,6 +151,26 @@ nDCG with official gains, ties broken at random (mean of 3 seeds), 95% bootstrap
 | MiniLM MS MARCO, zero-shot | 0.8330 | 0.8340 [0.8311, 0.8369] | 0.625 |
 | B3 MiniLM fine-tuned, title, MSE (seed 42) | 0.8566 | 0.8549 [0.8518, 0.8578] | 0.676 |
 | B3 MiniLM fine-tuned, title, MSE (seed 43) | 0.8578 | 0.8555 [0.8523, 0.8586] | 0.679 |
+| B2 MiniLM-L6 bi-encoder, title, zero-shot | 0.8202 | 0.8281 [0.8248, 0.8311] | 0.606 |
+| B2 MiniLM-L6 bi-encoder, main, zero-shot | 0.8264 | 0.8306 [0.8276, 0.8339] | 0.614 |
+| B2 bge-base bi-encoder, title, zero-shot | 0.8418 | 0.8450 [0.8420, 0.8480] | 0.640 |
+| B2 bge-base bi-encoder, main, zero-shot | 0.8429 | 0.8471 [0.8440, 0.8500] | 0.643 |
 
 B3 reproduces Amazon's 0.857 (mean 0.8552; their training set was about 10% larger) and beats BM25 main by +0.031 [0.028, 0.034] on test. One run takes 10.5 minutes on a T4.
+
+## Direction 1 and 2 results (validation; test is blind until `10_report`)
+
+Val nDCG per seed (42 / 43). Paired differences are bootstrap over val queries, same seed.
+
+| Run | Val nDCG | Val E-over-S | Paired difference |
+| --- | ---: | ---: | --- |
+| D1 MiniLM `title_bc`, MSE | 0.8588 / 0.8595 | 0.683 / 0.685 | vs B3: +0.002 / +0.002 (CI contains 0) |
+| D1 MiniLM `main`, MSE | 0.8669 / 0.8700 | 0.698 / 0.697 | vs B3: +0.010 / +0.012 |
+| D1 DeBERTa `title`, MSE | 0.8801 / – | 0.715 | vs B3: +0.024 |
+| D1 DeBERTa `main`, MSE | 0.8878 / 0.8876 | 0.731 / 0.732 | vs MiniLM `main`: +0.021 / +0.018 |
+| D2 MiniLM `title`, ce4 | 0.8560 / 0.8579 | 0.680 / 0.682 | vs B3: −0.001 / +0.000 (CI contains 0) |
+| D2 MiniLM `title`, ListNet | 0.8593 / 0.8564 | 0.686 / 0.684 | vs B3: +0.003 / −0.001 (CI contains 0) |
+| D2 DeBERTa `main`, ce4 | 0.8891 / – | 0.733 | vs DeBERTa `main` MSE: +0.001 (CI contains 0) |
+
+Chosen cross-encoder for Direction 3: DeBERTa-v3-base, `main`, `max_len` 256, ce4 (ties with MSE and gives class probabilities).
 

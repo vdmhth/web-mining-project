@@ -1,0 +1,80 @@
+{
+  "run": "b2_bge_title",
+  "mode": "full",
+  "model": "BAAI/bge-base-en-v1.5",
+  "pooling": "cls",
+  "query_prefix": "Represent this sentence for searching relevant passages: ",
+  "fields": "title",
+  "max_len": 128,
+  "query_max_len": 64,
+  "fine_tuned": false,
+  "n_products": 482105,
+  "query_encode_minutes": 0.2,
+  "product_encode_minutes": 6.3,
+  "gpu": "Tesla T4",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-18 12:06",
+  "src_version": {
+    "files_sha1": "912ae5d0a3"
+  },
+  "env": {
+    "python": "3.13.16",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  },
+  "metrics": {
+    "val": {
+      "ndcg": 0.8418,
+      "ndcg_amazon": 0.8214,
+      "ndcg10": 0.7319,
+      "mrr_e": 0.8,
+      "ndcg_ci95": [
+        0.8352,
+        0.8483
+      ],
+      "e_over_s": 0.6326,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.845,
+      "ndcg_amazon": 0.8243,
+      "ndcg10": 0.7366,
+      "mrr_e": 0.7981,
+      "ndcg_ci95": [
+        0.842,
+        0.848
+      ],
+      "e_over_s": 0.6397,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b1_bm25_main": {
+      "val": {
+        "diff": 0.0191,
+        "ci95": [
+          0.0133,
+          0.0246
+        ],
+        "p_b_le_a": 0.0
+      },
+      "test": {
+        "diff": 0.0206,
+        "ci95": [
+          0.0179,
+          0.0235
+        ],
+        "p_b_le_a": 0.0
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "run": "b2_minilml6_title",
+  "mode": "full",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "pooling": "mean",
+  "query_prefix": "",
+  "fields": "title",
+  "max_len": 128,
+  "query_max_len": 64,
+  "fine_tuned": false,
+  "n_products": 482105,
+  "query_encode_minutes": 0.1,
+  "product_encode_minutes": 1.9,
+  "gpu": "Tesla T4",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-18 11:49",
+  "src_version": {
+    "files_sha1": "912ae5d0a3"
+  },
+  "env": {
+    "python": "3.13.16",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  },
+  "metrics": {
+    "val": {
+      "ndcg": 0.8202,
+      "ndcg_amazon": 0.7955,
+      "ndcg10": 0.699,
+      "mrr_e": 0.7519,
+      "ndcg_ci95": [
+        0.8132,
+        0.8267
+      ],
+      "e_over_s": 0.5976,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.8281,
+      "ndcg_amazon": 0.8051,
+      "ndcg10": 0.7091,
+      "mrr_e": 0.7672,
+      "ndcg_ci95": [
+        0.8248,
+        0.8311
+      ],
+      "e_over_s": 0.6062,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b1_bm25_main": {
+      "val": {
+        "diff": -0.0025,
+        "ci95": [
+          -0.0082,
+          0.0031
+        ],
+        "p_b_le_a": 0.808
+      },
+      "test": {
+        "diff": 0.0038,
+        "ci95": [
+          0.0012,
+          0.0065
+        ],
+        "p_b_le_a": 0.004
+      }
+    }
+  }
+}

@@ -5,3 +5,6 @@
 __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
+# out-of-fold scores of 07_oof are large: keep them on Kaggle / ../kaggle_outputs
+data/results/scores/oof_*
+data/results/oof/

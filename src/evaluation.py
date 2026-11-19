@@ -149,21 +149,33 @@ class RunLog:
         self.records, self.per_query = {}, {}
         self.version = src_version()
 
-    def log(self, name, scores, info, compare_to=None):
-        # scores: {split: array}; compare_to: an earlier run (logged or loaded) for a paired bootstrap on nDCG
+    def log(self, name, scores, info, compare_to=None, blind=(), extra=None):
+        # scores: {split: array}; compare_to: an earlier run (logged or loaded) for a paired bootstrap on nDCG.
+        # Splits in `blind` (e.g. 'test' while configurations are still being chosen on val) are saved as scores
+        # only, with no metrics computed or printed; the report notebook scores them later.
+        # extra: {split: DataFrame in the row order of parts[split]} of columns saved next to `score`
+        # (e.g. the ce4 class probabilities p_E..p_I, features for the re-ranker).
+        extra = extra or {}
         rec = {'run': name, **info, 'tie_seeds': list(TIE_SEEDS), 'bootstrap': 1000,
                'created_utc': time.strftime('%Y-%m-%d %H:%M', time.gmtime()),
                'src_version': self.version, 'env': env_versions(), 'metrics': {}}
+        if blind:
+            rec['blind_splits'] = sorted(blind)
         self.per_query[name] = {}
         for split, sc in scores.items():
             part = self.parts[split]
             sc = np.asarray(sc, dtype=float)
-            rec['metrics'][split], self.per_query[name][split] = summarize(part, sc)
-            part[['example_id', 'query_id']].assign(score=sc.astype('float32')).to_parquet(
-                self.res / 'scores' / f'{name}_{split}.parquet', index=False)
+            if split not in blind:
+                rec['metrics'][split], self.per_query[name][split] = summarize(part, sc)
+            out = part[['example_id', 'query_id']].assign(score=sc.astype('float32')).reset_index(drop=True)
+            if split in extra:
+                ex = extra[split].reset_index(drop=True)
+                assert len(ex) == len(out) and not set(ex.columns) & set(out.columns), f'bad extra columns for {split}'
+                out = pd.concat([out, ex], axis=1)
+            out.to_parquet(self.res / 'scores' / f'{name}_{split}.parquet', index=False)
         if compare_to in self.per_query:
             rec['paired_vs'] = {compare_to: {s: paired_bootstrap(self.per_query[compare_to][s], self.per_query[name][s])
-                                             for s in scores if s in self.per_query[compare_to]}}
+                                             for s in self.per_query[name] if s in self.per_query[compare_to]}}
         elif compare_to:
             print(f'{compare_to} not logged or loaded: no paired comparison')
         self.records[name] = rec

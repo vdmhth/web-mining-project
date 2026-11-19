@@ -1,0 +1,80 @@
+{
+  "run": "b2_minilml6_main",
+  "mode": "full",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "pooling": "mean",
+  "query_prefix": "",
+  "fields": "main",
+  "max_len": 256,
+  "query_max_len": 64,
+  "fine_tuned": false,
+  "n_products": 482105,
+  "query_encode_minutes": 0.1,
+  "product_encode_minutes": 9.7,
+  "gpu": "Tesla T4",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-18 11:59",
+  "src_version": {
+    "files_sha1": "912ae5d0a3"
+  },
+  "env": {
+    "python": "3.13.16",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  },
+  "metrics": {
+    "val": {
+      "ndcg": 0.8264,
+      "ndcg_amazon": 0.8037,
+      "ndcg10": 0.7096,
+      "mrr_e": 0.7617,
+      "ndcg_ci95": [
+        0.8202,
+        0.8328
+      ],
+      "e_over_s": 0.6048,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    },
+    "test": {
+      "ndcg": 0.8306,
+      "ndcg_amazon": 0.8081,
+      "ndcg10": 0.7137,
+      "mrr_e": 0.7702,
+      "ndcg_ci95": [
+        0.8276,
+        0.8339
+      ],
+      "e_over_s": 0.6136,
+      "n_queries": 8956,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "paired_vs": {
+    "b1_bm25_main": {
+      "val": {
+        "diff": 0.0037,
+        "ci95": [
+          -0.002,
+          0.0093
+        ],
+        "p_b_le_a": 0.101
+      },
+      "test": {
+        "diff": 0.0063,
+        "ci95": [
+          0.0038,
+          0.0089
+        ],
+        "p_b_le_a": 0.0
+      }
+    }
+  }
+}
