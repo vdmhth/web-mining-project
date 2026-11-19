@@ -1,0 +1,161 @@
+{
+  "run": "d3_lgbm_lambdarank",
+  "mode": "full",
+  "objective": "lambdarank",
+  "setting": "base",
+  "params": {
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "min_data_in_leaf": 100,
+    "feature_fraction": 0.8,
+    "lambda_l2": 1.0,
+    "seed": 42,
+    "deterministic": true,
+    "force_row_wise": true,
+    "num_threads": 4,
+    "verbose": -1,
+    "objective": "lambdarank",
+    "metric": "ndcg",
+    "eval_at": [
+      188
+    ],
+    "label_gain": [
+      0.0,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "lambdarank_truncation_level": 188
+  },
+  "features": [
+    "ce_score",
+    "p_E",
+    "p_S",
+    "p_C",
+    "p_I",
+    "ce_score_rank",
+    "ce_score_z",
+    "ce_score_gap",
+    "p_E_rank",
+    "p_E_z",
+    "p_E_gap",
+    "q_ce_max",
+    "q_ce_mean",
+    "q_ce_std",
+    "bm25_title",
+    "bm25_main",
+    "bm25_main_rank",
+    "bm25_main_z",
+    "bm25_main_gap",
+    "overlap_title",
+    "overlap_main",
+    "num_match",
+    "unit_match",
+    "color_match",
+    "brand_in_query",
+    "neg_violation",
+    "b2_bge_title",
+    "b2_bge_main",
+    "b2_minilml6_title",
+    "b2_minilml6_main",
+    "b2_bge_main_rank",
+    "b2_bge_main_z",
+    "b2_bge_main_gap",
+    "brand_share",
+    "top_brand",
+    "q_n_brands",
+    "title_words",
+    "bullet_words",
+    "has_brand",
+    "has_color",
+    "has_bullets",
+    "has_description",
+    "q_words",
+    "q_has_num",
+    "q_has_unit",
+    "q_has_color",
+    "q_has_neg",
+    "n_cand"
+  ],
+  "n_features": 48,
+  "n_folds": 5,
+  "best_iterations": [
+    22,
+    192,
+    241,
+    243,
+    214
+  ],
+  "max_rounds": 3000,
+  "patience": 100,
+  "sample": null,
+  "fit_minutes": 1.4,
+  "val_test_scores": "mean of the 5 fold models",
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-19 15:18",
+  "src_version": {
+    "files_sha1": "62eb710944"
+  },
+  "env": {
+    "python": "3.13.16",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "lightgbm": "4.6.0"
+  },
+  "metrics": {
+    "oof": {
+      "ndcg": 0.8888,
+      "ndcg_amazon": 0.8734,
+      "ndcg10": 0.8116,
+      "mrr_e": 0.8723,
+      "ndcg_ci95": [
+        0.8869,
+        0.8908
+      ],
+      "e_over_s": 0.733,
+      "n_queries": 18799,
+      "n_skipped_all_irrelevant": 0
+    },
+    "val": {
+      "ndcg": 0.8936,
+      "ndcg_amazon": 0.8793,
+      "ndcg10": 0.819,
+      "mrr_e": 0.88,
+      "ndcg_ci95": [
+        0.8881,
+        0.8993
+      ],
+      "e_over_s": 0.7375,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    }
+  },
+  "blind_splits": [
+    "test"
+  ],
+  "paired_vs": {
+    "d3_ce_deberta_main_ce4": {
+      "oof": {
+        "diff": 0.004,
+        "ci95": [
+          0.0033,
+          0.0048
+        ],
+        "p_b_le_a": 0.0
+      },
+      "val": {
+        "diff": 0.0016,
+        "ci95": [
+          -0.0008,
+          0.0039
+        ],
+        "p_b_le_a": 0.089
+      }
+    }
+  }
+}

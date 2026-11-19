@@ -1,0 +1,50 @@
+{
+  "run": "d3_ce_deberta_main_ce4",
+  "mode": "full",
+  "model": "ce score alone (07_oof assemble, via 08_features)",
+  "sample": null,
+  "tie_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bootstrap": 1000,
+  "created_utc": "2026-11-19 15:03",
+  "src_version": {
+    "files_sha1": "62eb710944"
+  },
+  "env": {
+    "python": "3.13.16",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "lightgbm": "4.6.0"
+  },
+  "metrics": {
+    "oof": {
+      "ndcg": 0.8848,
+      "ndcg_amazon": 0.8688,
+      "ndcg10": 0.8057,
+      "mrr_e": 0.8637,
+      "ndcg_ci95": [
+        0.8828,
+        0.8869
+      ],
+      "e_over_s": 0.7284,
+      "n_queries": 18799,
+      "n_skipped_all_irrelevant": 0
+    },
+    "val": {
+      "ndcg": 0.892,
+      "ndcg_amazon": 0.8776,
+      "ndcg10": 0.8158,
+      "mrr_e": 0.8769,
+      "ndcg_ci95": [
+        0.886,
+        0.8976
+      ],
+      "e_over_s": 0.7373,
+      "n_queries": 2089,
+      "n_skipped_all_irrelevant": 0
+    }
+  }
+}

@@ -177,3 +177,16 @@ Val nDCG per seed (42 / 43). Paired differences are bootstrap over val queries, 
 
 Chosen cross-encoder for Direction 3: DeBERTa-v3-base, `main`, `max_len` 256, ce4 (ties with MSE and gives class probabilities).
 
+## Direction 3 results (validation; test is blind until `10_report`)
+
+LightGBM on the 48 features of `08_features`, 5-fold CV on train (out-of-fold CE features), val/test = mean of the 5 fold models. Reference: the CE score alone (train out-of-fold / val mean of 5 fold models). CV is slightly optimistic (early stopping on the held-out fold); val is not used for fitting or stopping.
+
+| Run | CV nDCG (train) | Val nDCG [CI 95%] | Val nDCG@10 | Val E-over-S | Val vs CE alone |
+| --- | ---: | ---: | ---: | ---: | --- |
+| CE alone (DeBERTa `main` ce4, 5 folds) | 0.8848 | 0.8920 [0.8860, 0.8976] | 0.816 | 0.737 | – |
+| LightGBM lambdarank (`base`) | 0.8888 | 0.8936 [0.8881, 0.8993] | 0.819 | 0.738 | +0.0016 [−0.0008, 0.0039] |
+| LightGBM multiclass (`small`) | 0.8884 | 0.8947 [0.8891, 0.9003] | 0.821 | 0.738 | +0.0027 [0.0005, 0.0048] |
+
+Both objectives add +0.004 on CV (CI excludes 0); on val only multiclass is clearly above the CE alone (also nDCG@10 +0.005, MRR +0.007). Multiclass − lambdarank: −0.0004 on CV, +0.0011 [−0.0004, 0.0025] on val (a tie). Grid settings differ by ≤ 0.001.
+
+Ablation (lambdarank, paired with all features, CV): without any CE feature 0.8612 (−0.028; val 0.8605, above B3); CE features only −0.0035; dropping one other group costs 0.0005–0.0011 (bi-encoder most), except the query group (0). On val every single-group change is inside ±0.002 (CI contains 0). Gain importance: within-query CE features (`ce_score_z`, `p_E_z`, …) 86%, raw CE 5%, bi-encoder 5%.
