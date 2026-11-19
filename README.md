@@ -61,10 +61,12 @@ The data files are **not stored in this repository**. They are kept in a private
 │   ├── 06_d2_losses.ipynb         Direction 2: MSE vs 4-class CE vs ListNet (MiniLM title; ce4 on DeBERTa main)
 │   ├── 07_oof.ipynb               Direction 3 input: 5-fold out-of-fold DeBERTa main ce4 scores + p_E..p_I (GPU)
 │   ├── 08_features.ipynb          Direction 3 feature table: CE, within-query, lexical, bi-encoder, brand-list (CPU)
-│   └── 09_lgbm.ipynb              Direction 3: LightGBM re-ranker, lambdarank vs multiclass, 5-fold CV, ablation (CPU)
+│   ├── 09_lgbm.ipynb              Direction 3: LightGBM re-ranker, lambdarank vs multiclass, 5-fold CV, ablation (CPU)
+│   └── 10_report.ipynb            final test scores, paired tests, breakdown by query type, error analysis (CPU)
 └── data/                          small outputs only; large files stay on Kaggle
     ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv
-    └── results/                   <run>.json + scores/<run>_{val,test}.parquet
+    ├── results/                   <run>.json + scores/<run>_{val,test}.parquet
+    └── report/                    tables of 10_report (final results, paired tests, by query type, worst queries)
 ```
 
 ## Workflow
@@ -78,7 +80,7 @@ esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ───────
                             └─► 05_d1, 06_d2 ──► 07_oof ──► 08_features ──► 09_lgbm ──► 10_report
 ```
 
-05 and 06 choose the cross-encoder configuration on val; 07 trains it once per fold; 08 builds the re-ranker's feature table; 09 trains the LightGBM re-ranker; 10 is planned.
+05 and 06 choose the cross-encoder configuration on val; 07 trains it once per fold; 08 builds the re-ranker's feature table; 09 trains the LightGBM re-ranker; 10 scores every chosen run on test once.
 
 | Output | Where it lives | In git |
 | --- | --- | :---: |

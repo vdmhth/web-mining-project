@@ -1,0 +1,7 @@
+,E,S,C,I,S - E
+BM25 main,0.443,0.542,0.473,0.57,0.099
+Bi-encoder bge-base main (zero-shot),0.423,0.543,0.534,0.602,0.12
+"CE MiniLM title, MSE (s42)",0.414,0.554,0.552,0.599,0.14
+"CE DeBERTa main, MSE (s42)",0.384,0.568,0.629,0.627,0.184
+"CE DeBERTa main ce4, mean of 5 fold models",0.383,0.567,0.633,0.632,0.184
+LightGBM multiclass on CE + features,0.381,0.568,0.623,0.638,0.187

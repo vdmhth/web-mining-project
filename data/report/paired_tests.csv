@@ -1,0 +1,21 @@
+question,a,b,val_diff,val_ci95,test_diff,test_ci95,test_wilcoxon_p,test_better,test_worse
+B2 bge main vs BM25 main,BM25 main,Bi-encoder bge-base main (zero-shot),0.0202,"[0.0151, 0.0253]",0.0227,"[0.0202, 0.0252]",4.0e-77,5108,3657
+B3 fine-tuning vs zero-shot CE,CE MiniLM MS MARCO title (zero-shot),"CE MiniLM title, MSE (s42)",0.0235,"[0.0197, 0.0277]",0.0209,"[0.0189, 0.0229]",1.6e-131,5537,3167
+B3 vs BM25 main,BM25 main,"CE MiniLM title, MSE (s42)",0.0338,"[0.0278, 0.0396]",0.0305,"[0.0278, 0.0335]",3.0e-106,5256,3572
+D1 MiniLM: title_bc vs title (s42),"CE MiniLM title, MSE (s42)","CE MiniLM title_bc, MSE (s42)",0.0023,"[-0.0002, 0.0048]",0.0034,"[0.0023, 0.0046]",1.7e-08,4209,3781
+D1 MiniLM: main vs title (s42),"CE MiniLM title, MSE (s42)","CE MiniLM main, MSE (s42)",0.0104,"[0.0069, 0.0141]",0.0106,"[0.0088, 0.0122]",1.5e-48,4876,3580
+D1 DeBERTa: main vs title,"CE DeBERTa title, MSE","CE DeBERTa main, MSE (s42)",0.0077,"[0.0043, 0.011]",0.0102,"[0.0086, 0.0118]",2.0e-48,4752,3466
+D1 main: DeBERTa vs MiniLM (s42),"CE MiniLM main, MSE (s42)","CE DeBERTa main, MSE (s42)",0.0209,"[0.0163, 0.0253]",0.022,"[0.0199, 0.0241]",1.4e-135,5456,3117
+D1 main: DeBERTa vs MiniLM (s43),"CE MiniLM main, MSE (s43)","CE DeBERTa main, MSE (s43)",0.0176,"[0.0129, 0.0222]",0.0196,"[0.0175, 0.0217]",1.2e-112,5361,3191
+D1 seed: DeBERTa main s43 vs s42,"CE DeBERTa main, MSE (s42)","CE DeBERTa main, MSE (s43)",-0.0001,"[-0.0029, 0.003]",-0.0014,"[-0.0025, -0.0001]",1.2e-03,3763,4058
+D2 MiniLM: ce4 vs MSE (s42),"CE MiniLM title, MSE (s42)","CE MiniLM title, ce4 (s42)",-0.0006,"[-0.0036, 0.0026]",-0.0005,"[-0.0018, 0.0008]",9.3e-01,4207,4109
+D2 MiniLM: ce4 vs MSE (s43),"CE MiniLM title, MSE (s43)","CE MiniLM title, ce4 (s43)",0.0001,"[-0.0031, 0.0034]",0.0012,"[-0.0001, 0.0027]",3.4e-03,4328,4023
+D2 MiniLM: ListNet vs MSE (s42),"CE MiniLM title, MSE (s42)","CE MiniLM title, ListNet (s42)",0.0027,"[-0.0002, 0.0057]",0.0032,"[0.0019, 0.0047]",5.8e-07,4306,3863
+D2 MiniLM: ListNet vs MSE (s43),"CE MiniLM title, MSE (s43)","CE MiniLM title, ListNet (s43)",-0.0014,"[-0.0043, 0.0015]",0.0026,"[0.0012, 0.0039]",3.4e-04,4262,3891
+D2 DeBERTa main: ce4 vs MSE,"CE DeBERTa main, MSE (s42)","CE DeBERTa main, ce4",0.0014,"[-0.0013, 0.0042]",-0.0009,"[-0.0022, 0.0005]",2.7e-01,3890,3952
+D3 mean of 5 fold models vs 1 model on all train,"CE DeBERTa main, ce4","CE DeBERTa main ce4, mean of 5 fold models",0.0029,"[0.0007, 0.0052]",0.0019,"[0.0007, 0.0029]",6.0e-06,3959,3559
+D3 LightGBM lambdarank vs CE (5 folds),"CE DeBERTa main ce4, mean of 5 fold models",LightGBM lambdarank on CE + features,0.0016,"[-0.0008, 0.0039]",0.0034,"[0.0022, 0.0045]",6.9e-13,3770,3332
+D3 LightGBM multiclass vs CE (5 folds),"CE DeBERTa main ce4, mean of 5 fold models",LightGBM multiclass on CE + features,0.0027,"[0.0005, 0.0048]",0.0035,"[0.0023, 0.0047]",1.2e-12,3834,3371
+D3 multiclass vs lambdarank,LightGBM lambdarank on CE + features,LightGBM multiclass on CE + features,0.0011,"[-0.0004, 0.0025]",0.0001,"[-0.0007, 0.0009]",1.8e-01,3343,3236
+Final vs B3,"CE MiniLM title, MSE (s42)",LightGBM multiclass on CE + features,0.0381,"[0.0332, 0.043]",0.0372,"[0.0348, 0.0395]",6.5e-293,6023,2645
+Final vs BM25 main,BM25 main,LightGBM multiclass on CE + features,0.0719,"[0.0658, 0.0778]",0.0677,"[0.0649, 0.0704]",0.0e+00,6484,2272

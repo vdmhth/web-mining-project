@@ -1,0 +1,6 @@
+source,queries,BM25 main,Bi-encoder bge-base main (zero-shot),"CE MiniLM title, MSE (s42)","CE DeBERTa main, MSE (s42)","CE DeBERTa main ce4, mean of 5 fold models",LightGBM multiclass on CE + features
+behavioral,223,0.8516,0.8648,0.8651,0.887,0.8889,0.8931
+negations,689,0.751,0.7601,0.8212,0.8448,0.8454,0.8476
+nlqec,30,0.7225,0.838,0.7684,0.8526,0.8607,0.8669
+other,7233,0.8283,0.8532,0.8563,0.8915,0.8928,0.8966
+parse_pattern,781,0.8488,0.8631,0.8726,0.8903,0.8882,0.8898
