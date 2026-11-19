@@ -49,9 +49,9 @@ The data files are **not stored in this repository**. They are kept in a private
 │   │                              RunLog (writes <run>.json + scores)
 │   ├── text.py                    field cleaning, product text presets
 │   ├── cross_encoder.py           training loop, prediction, losses
-│   ├── features.py                BM25 (baseline B1, Direction 3 features)
+│   ├── features.py                BM25 (baseline B1); Direction 3 match rules, within-query and brand-list features
 │   └── data.py                    find(), load_pairs(fields): outputs of 01_preprocess
-├── tests/test_evaluation.py       metric and text checks on hand-made data
+├── tests/                         test_evaluation.py (metrics, text), test_features.py (Direction 3 features)
 ├── notebooks/                     run on Kaggle, one notebook per experiment
 │   ├── 01_preprocess.ipynb        clean, join, split
 │   ├── 02_bm25.ipynb              B0 random, B1 BM25
@@ -59,7 +59,9 @@ The data files are **not stored in this repository**. They are kept in a private
 │   ├── 04_biencoder.ipynb         B2 (zero-shot bi-encoders, GPU) + features for Direction 3
 │   ├── 05_d1_input_backbone.ipynb Direction 1: title_bc / main input, DeBERTa-v3-base (GPU)
 │   ├── 06_d2_losses.ipynb         Direction 2: MSE vs 4-class CE vs ListNet (MiniLM title; ce4 on DeBERTa main)
-│   └── 07_oof.ipynb               Direction 3 input: 5-fold out-of-fold DeBERTa main ce4 scores + p_E..p_I (GPU)
+│   ├── 07_oof.ipynb               Direction 3 input: 5-fold out-of-fold DeBERTa main ce4 scores + p_E..p_I (GPU)
+│   ├── 08_features.ipynb          Direction 3 feature table: CE, within-query, lexical, bi-encoder, brand-list (CPU)
+│   └── 09_lgbm.ipynb              Direction 3: LightGBM re-ranker, lambdarank vs multiclass, 5-fold CV, ablation (CPU)
 └── data/                          small outputs only; large files stay on Kaggle
     ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv
     └── results/                   <run>.json + scores/<run>_{val,test}.parquet
@@ -70,13 +72,13 @@ The data files are **not stored in this repository**. They are kept in a private
 Every step runs as a **Kaggle notebook** (CPU for data and BM25, GPU T4 with internet for transformers). Notebooks are chained on Kaggle with *Add Input → Notebook Output*, so large intermediate files never leave Kaggle.
 
 ```text
-esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ─────────────────────────┐
+esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ─────────────────────────┐ (08 also reads 01, 02, 04)
                             ├─► 03_cross_encoder (B3)                 │
                             ├─► 04_biencoder (B2) ────────────────────┤
                             └─► 05_d1, 06_d2 ──► 07_oof ──► 08_features ──► 09_lgbm ──► 10_report
 ```
 
-05 and 06 choose the cross-encoder configuration on val; 07 trains it once per fold; 08–10 are planned.
+05 and 06 choose the cross-encoder configuration on val; 07 trains it once per fold; 08 builds the re-ranker's feature table; 09 trains the LightGBM re-ranker; 10 is planned.
 
 | Output | Where it lives | In git |
 | --- | --- | :---: |
@@ -84,7 +86,8 @@ esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ───────
 | `pairs.parquet`, `products_clean.parquet` | Output of `01_preprocess` on Kaggle (can be rebuilt) | no |
 | Split manifest, data checks | `data/splits/` | yes |
 | Run metrics and per-pair scores | `data/results/` | yes |
-| Out-of-fold scores of 07 (`oof_*` fold files, `oof/ce_*.parquet`, ~70 MB) | Output of `07_oof` on Kaggle; local copy in `../kaggle_outputs/` | no |
+| Out-of-fold scores of 07 (`oof_*` fold files, `oof/ce_*.parquet`, ~70 MB) | Output of `07_oof` on Kaggle; local copy in `../kaggle_outputs/oof_scores/` (fold json files stay in `data/results/`) | no |
+| Feature table of 08 (`features.parquet`) | Output of `08_features` on Kaggle | no |
 
 ### Shared code (`src/`)
 
@@ -98,7 +101,7 @@ Then upload `wm-src.zip` as a new version of the Kaggle dataset `wm-src`, and in
 
 Every run's json records `src_version.files_sha1` (a hash of `src/*.py`; two runs with the same value ran the same code) and `env` (Python and library versions). Rules:
 
-- Do not edit `src/evaluation.py` without re-scoring the saved runs. `tests/test_evaluation.py` must pass (`python tests/test_evaluation.py`).
+- Do not edit `src/evaluation.py` without re-scoring the saved runs. `tests/test_evaluation.py` must pass (`python tests/test_evaluation.py`); likewise `tests/test_features.py` after changing `src/features.py`.
 - A new loss goes into `compute_loss` in `src/cross_encoder.py`; a new experiment gets its own notebook, not new cells in someone else's.
 - Rebuild and upload `wm-src` before running a notebook that needs a change in `src/`.
 
