@@ -19,3 +19,14 @@ D3 LightGBM multiclass vs CE (5 folds),"CE DeBERTa main ce4, mean of 5 fold mode
 D3 multiclass vs lambdarank,LightGBM lambdarank on CE + features,LightGBM multiclass on CE + features,0.0011,"[-0.0004, 0.0025]",0.0001,"[-0.0007, 0.0009]",1.8e-01,3343,3236
 Final vs B3,"CE MiniLM title, MSE (s42)",LightGBM multiclass on CE + features,0.0381,"[0.0332, 0.043]",0.0372,"[0.0348, 0.0395]",6.5e-293,6023,2645
 Final vs BM25 main,BM25 main,LightGBM multiclass on CE + features,0.0719,"[0.0658, 0.0778]",0.0677,"[0.0649, 0.0704]",0.0e+00,6484,2272
+Extra: DeBERTa ce4 2 epochs vs 1 epoch,"CE DeBERTa main, ce4","CE DeBERTa main, ce4, 2 epochs",-0.0003,"[-0.0025, 0.0019]",-0.0008,"[-0.0019, 0.0004]",2.8e-02,3707,3842
+"Extra: bge-reranker vs DeBERTa (main, ce4)","CE DeBERTa main, ce4","CE bge-reranker-base main, ce4",-0.022,"[-0.0264, -0.0174]",-0.0208,"[-0.0229, -0.0185]",3.9e-105,3287,5194
+Extra: bge-reranker vs MiniLM (main),"CE MiniLM main, MSE (s42)","CE bge-reranker-base main, ce4",0.0002,"[-0.004, 0.0047]",0.0003,"[-0.0018, 0.0026]",3.0e-01,4444,4164
+Extra: DeBERTa + bge-reranker vs DeBERTa,"CE DeBERTa main, ce4",Blend: DeBERTa ce4 + 0.2 bge-reranker,0.003,"[0.0015, 0.0047]",0.0022,"[0.0015, 0.0028]",5.7e-07,3442,3216
+Extra: DeBERTa + MiniLM vs DeBERTa,"CE DeBERTa main, ce4",Blend: DeBERTa ce4 + 0.2 MiniLM main,0.0003,"[-0.0014, 0.002]",0.0007,"[-0.0001, 0.0015]",3.4e-01,3458,3522
+Extra: final + bge-reranker vs final,LightGBM multiclass on CE + features,Blend: final + 0.2 bge-reranker,0.0005,"[-0.0008, 0.0019]",0.0005,"[-0.0003, 0.0011]",8.1e-01,3207,3320
+"Extra: DeBERTa large vs base (main, ce4)","CE DeBERTa main, ce4","CE DeBERTa-v3-large main, ce4",0.0055,"[0.0018, 0.0091]",0.007,"[0.0052, 0.0086]",8.0e-17,4385,3691
+Extra: DeBERTa large vs final,LightGBM multiclass on CE + features,"CE DeBERTa-v3-large main, ce4",-0.0001,"[-0.0037, 0.0034]",0.0015,"[-0.0001, 0.0032]",1.1e-01,4136,3887
+Extra: large + base vs large,"CE DeBERTa-v3-large main, ce4",Blend: large + 0.3 DeBERTa-base,0.0021,"[0.0004, 0.0036]",0.0014,"[0.0007, 0.0022]",1.6e-09,3547,3173
+Extra: large + bge-reranker vs large,"CE DeBERTa-v3-large main, ce4",Blend: large + 0.2 bge-reranker,0.0019,"[0.0005, 0.0034]",0.0009,"[0.0002, 0.0017]",1.3e-02,3307,3276
+Extra: final + large vs final,LightGBM multiclass on CE + features,Blend: final + 0.5 large,0.0031,"[0.0007, 0.0056]",0.0047,"[0.0037, 0.0059]",6.2e-29,4150,3208

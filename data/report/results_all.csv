@@ -24,3 +24,12 @@ D2,"CE DeBERTa main, ce4",42.0,d2_deberta_main_ce4_s42,0.8891,0.8867,"[0.8838, 0
 D3,"CE DeBERTa main ce4, mean of 5 fold models",42.0,d3_ce_deberta_main_ce4,0.892,0.8885,"[0.8855, 0.8912]",0.8731,0.8112,0.868,0.7306
 D3,LightGBM lambdarank on CE + features,42.0,d3_lgbm_lambdarank,0.8936,0.892,"[0.8891, 0.8945]",0.8768,0.8159,0.8731,0.7327
 D3,LightGBM multiclass on CE + features,42.0,d3_lgbm_multiclass,0.8947,0.8921,"[0.889, 0.8947]",0.8771,0.8166,0.8743,0.7329
+Extra,"CE DeBERTa main, ce4, 2 epochs",42.0,d2_deberta_main_e2_ce4_s42,0.8889,0.8858,"[0.8828, 0.8887]",0.8701,0.8066,0.8647,0.7272
+Extra,"CE bge-reranker-base main, ce4",42.0,d1_bgerr_main_ce4_s42,0.8671,0.8659,"[0.8628, 0.8687]",0.849,0.7729,0.8315,0.6934
+Extra,Blend: DeBERTa ce4 + 0.2 bge-reranker,42.0,x_deberta_bgerr,0.8922,0.8888,"[0.886, 0.8916]",0.8735,0.8112,0.8694,0.7303
+Extra,Blend: DeBERTa ce4 + 0.2 MiniLM main,42.0,x_deberta_minilm,0.8894,0.8874,"[0.8844, 0.8902]",0.8719,0.8093,0.8656,0.7301
+Extra,Blend: final + 0.2 bge-reranker,42.0,x_final_bgerr,0.8952,0.8926,"[0.8895, 0.8952]",0.8776,0.8172,0.8762,0.7337
+Extra,"CE DeBERTa-v3-large main, ce4",42.0,d1_debertalarge_main_ce4_s42,0.8946,0.8936,"[0.8908, 0.8964]",0.8784,0.8183,0.8765,0.7374
+Extra,Blend: large + 0.3 DeBERTa-base,42.0,x_large_base,0.8967,0.895,"[0.8923, 0.8979]",0.88,0.8214,0.8777,0.7402
+Extra,Blend: large + 0.2 bge-reranker,42.0,x_large_bgerr,0.8964,0.8946,"[0.8917, 0.8973]",0.8797,0.8202,0.8759,0.7387
+Extra,Blend: final + 0.5 large,42.0,x_final_large,0.8978,0.8968,"[0.8938, 0.8995]",0.8822,0.8239,0.8807,0.7414

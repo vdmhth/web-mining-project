@@ -62,7 +62,9 @@ The data files are **not stored in this repository**. They are kept in a private
 │   ├── 07_oof.ipynb               Direction 3 input: 5-fold out-of-fold DeBERTa main ce4 scores + p_E..p_I (GPU)
 │   ├── 08_features.ipynb          Direction 3 feature table: CE, within-query, lexical, bi-encoder, brand-list (CPU)
 │   ├── 09_lgbm.ipynb              Direction 3: LightGBM re-ranker, lambdarank vs multiclass, 5-fold CV, ablation (CPU)
-│   └── 10_report.ipynb            final test scores, paired tests, breakdown by query type, error analysis (CPU)
+│   ├── 10_report.ipynb            final test scores, paired tests, breakdown by query type, error analysis (CPU)
+│   ├── 11_bge_reranker.ipynb      second backbone: bge-reranker-base (XLM-R) main ce4, vs and averaged with DeBERTa (GPU)
+│   └── 12_deberta_large_t4x2.ipynb DeBERTa-v3-large main ce4 on 2 x T4 (DDP via torchrun): full run, 5-fold OOF + assemble
 └── data/                          small outputs only; large files stay on Kaggle
     ├── splits/                    split_manifest.csv, data_check.json, label_conflicts.csv
     ├── results/                   <run>.json + scores/<run>_{val,test}.parquet
@@ -91,48 +93,6 @@ esci-raw ──► 01_preprocess ─┬─► 02_bm25 (B1) ───────
 | Out-of-fold scores of 07 (`oof_*` fold files, `oof/ce_*.parquet`, ~70 MB) | Output of `07_oof` on Kaggle; local copy in `../kaggle_outputs/oof_scores/` (fold json files stay in `data/results/`) | no |
 | Feature table of 08 (`features.parquet`, ~70 MB) | Output of `08_features` on Kaggle; local copy in `../kaggle_outputs/features/` | no |
 | Report tables of 10 (final results, paired tests, by query type, worst queries) | `data/report/` | yes |
-
-### Shared code (`src/`)
-
-Notebooks hold the experiment (config, calls, tables, comments). Anything used by more than one notebook lives in `src/`: above all the evaluation, so every run is scored by the same code. `src/` (and `data/results/`, the saved runs that later notebooks compare with) reaches Kaggle as a private dataset **`wm-src`**; the first cell of each notebook finds it under `/kaggle/input` and makes it importable. After changing `src/`, zip it from the repo root:
-
-```powershell
-tar -a -c -f ..\wm-src.zip --exclude=__pycache__ src data/results
-```
-
-Then upload `wm-src.zip` as a new version of the Kaggle dataset `wm-src`, and in the notebook click *Update* on that input.
-
-Every run's json records `src_version.files_sha1` (a hash of `src/*.py`; two runs with the same value ran the same code) and `env` (Python and library versions). Rules:
-
-- Do not edit `src/evaluation.py` without re-scoring the saved runs. `tests/test_evaluation.py` must pass (`python tests/test_evaluation.py`); likewise `tests/test_features.py` after changing `src/features.py`.
-- A new loss goes into `compute_loss` in `src/cross_encoder.py`; a new experiment gets its own notebook, not new cells in someone else's.
-- Rebuild and upload `wm-src` before running a notebook that needs a change in `src/`.
-
-### Running a notebook on Kaggle
-
-1. Raw data: a private dataset `esci-raw` with the three data files and `eda/tables/query_groups_val_proposal.csv`.
-2. *File → Import Notebook*, then add the inputs listed in the notebook's first cell: always `wm-src`, plus `esci-raw` or the *Notebook Output* of an earlier notebook. CPU for 01 and 02, GPU T4 with *Internet on* for 03 (Hugging Face models).
-3. *Run All*, check the printed checks, then *Save Version → Save & Run All*.
-4. Download the small outputs into `data/splits/` or `data/results/` and push them.
-
-## Conventions
-
-These rules apply to every experiment so that results stay comparable.
-
-| Topic | Rule |
-| --- | --- |
-| Validation split | 10% of training queries (2,089), grouped by near-duplicate query (`dup_group`), seed 42. Taken from `eda/tables/query_groups_val_proposal.csv`. |
-| Folds | `fold10` (0–9) on the remaining 18,799 training queries, assigned by `dup_group`. Out-of-fold scores for Direction 3 use **5 folds** (`fold10 // 2`): each fold model trains on 80% of train, and val/test scores are the mean of the 5 fold models. |
-| `max_len` | 128 for `title` / `title_bc`; 256 for `main` (MiniLM and DeBERTa), which truncates about 21% of products (bullets only, the title comes first). |
-| Model selection | On validation only. From Direction 1 on, test scores are saved blind (`RunLog.log(..., blind=('test',))`) and scored once in `10_report` for the final configurations. |
-| Metrics | nDCG (main), nDCG@10, MRR of the first Exact item, E-over-S pair accuracy. Ties broken at random, averaged over 3 seeds. |
-| Gains | Official (E 1, S 0.1, C 0.01, I 0). Amazon's script swaps S and C; `ndcg_amazon` keeps that mapping for reference only. The published 0.857 matches the official gains (B3 below). |
-| Significance | Paired bootstrap / Wilcoxon on per-query nDCG. |
-| Text cleaning | Light: HTML removed, NFC, whitespace collapsed. Case, digits, units and punctuation kept. |
-| Product text | Presets `title`, `title_bc`, `main` (+ bullets), `all` (+ description); format `title [SEP] brand: X [SEP] color: Y [SEP] bullets`; missing fields dropped. |
-| Banned features | Catalogue row position, `product_id` patterns, `small_version` / `large_version`, the product's labels in other queries. |
-| Run names | `<stage>_<model>[_<fields>][_<loss>][_s<seed>]`, lower case with `_`; stage is `b0`–`b3` or `d1`–`d3`. E.g. `b1_bm25_title`, `b3_minilm_title_zeroshot`, `b3_minilm_title_mse_s42`. |
-| Notebook names | `NN_<topic>.ipynb` (two-digit number, `_`), e.g. `03_cross_encoder.ipynb`. |
 
 ## Reference numbers
 
@@ -175,6 +135,28 @@ Paired differences on test (bootstrap CI over the 8,956 test queries; all Wilcox
 | D3 LightGBM multiclass vs CE (5 folds) | +0.0035 [0.0023, 0.0047] | yes |
 | D3 multiclass vs lambdarank | +0.0001 [−0.0007, 0.0009] (n.s.) | yes: a tie |
 | Seed: DeBERTa `main` MSE s43 vs s42 | −0.0014 [−0.0025, −0.0001] | seed noise is about 0.001 |
+
+### Additional experiments (after the final system was chosen)
+
+Run after the choice above, so none of them changes it; their test scores are reported, not used to choose. Blends: scores standardized within each query, then weighted. Each weight is the best of 0.1–0.5 on val (bge 0.2 with DeBERTa-base, reused for the MiniLM blend and final + bge; base 0.3 and bge 0.2 with large; large 0.5 with the final system), so val is slightly optimistic for blends and test is the fair comparison. Rows `Extra` in `data/report/`.
+
+| Run | Val | Test [CI 95%] | Paired difference, test [CI 95%] |
+| --- | ---: | ---: | --- |
+| DeBERTa `main` ce4, 2 epochs | 0.8889 | 0.8858 [0.8828, 0.8887] | vs 1 epoch: −0.0008 [−0.0019, 0.0004] (n.s.) |
+| bge-reranker-base `main` ce4 (`11_bge_reranker`) | 0.8671 | 0.8659 [0.8628, 0.8687] | vs DeBERTa: −0.0208 [−0.0229, −0.0185]; vs MiniLM `main`: +0.0003 (n.s.) |
+| Blend DeBERTa ce4 + 0.2 bge-reranker | 0.8922 | 0.8888 [0.8860, 0.8916] | vs DeBERTa: +0.0022 [0.0015, 0.0028] |
+| Blend DeBERTa ce4 + 0.2 MiniLM `main` | 0.8894 | 0.8874 [0.8844, 0.8902] | vs DeBERTa: +0.0007 [−0.0001, 0.0015] (n.s.) |
+| Blend final + 0.2 bge-reranker | 0.8952 | 0.8926 [0.8895, 0.8952] | vs final: +0.0005 [−0.0003, 0.0011] (n.s.) |
+| DeBERTa-v3-large `main` ce4 (`12_deberta_large_t4x2`, 2 × T4) | 0.8946 | 0.8936 [0.8908, 0.8964] | vs base: +0.0070 [0.0052, 0.0086]; vs final: +0.0015 [−0.0001, 0.0032] (n.s.) |
+| Blend large + 0.3 DeBERTa-base | 0.8967 | 0.8950 [0.8923, 0.8979] | vs large: +0.0014 [0.0007, 0.0022] |
+| Blend large + 0.2 bge-reranker | 0.8964 | 0.8946 [0.8917, 0.8973] | vs large: +0.0009 [0.0002, 0.0017] |
+| **Blend final + 0.5 large** | **0.8978** | **0.8968 [0.8938, 0.8995]** | vs final: **+0.0047 [0.0037, 0.0059]** |
+
+- **A second epoch does not help.** Val stays at 0.886–0.889 through epoch 2 while the training loss drops at the epoch boundary (memorization), so 1 epoch is kept.
+- **A different model family adds, a weaker model of the same kind does not.** bge-reranker and MiniLM `main` score the same alone and agree with DeBERTa about equally, yet only bge improves the blend. Whether a model helps an ensemble has to be measured, not inferred from its own score.
+- **Most of that gain is already in the final system.** Added to LightGBM the blend gives +0.0005 (n.s.): the bi-encoder and lexical features already carry similar information. Using bge properly would need 5-fold OOF scores as a feature group (expected +0.001–0.002), not done.
+- **DeBERTa-v3-large is the strongest single model.** Same settings as the base ce4 run except lr 1e-5, trained on 2 × T4 (DDP, batch 32 = 2 GPUs × 4 micro-batches of 4 pairs; 4.7 h training + 0.5 h prediction). Alone it matches the LightGBM final on val (0.8946 vs 0.8947) and is slightly above it on test (n.s.); it beats DeBERTa-base by +0.007 on test, and every metric improves (nDCG@10 0.818, E-over-S 0.737).
+- **Large adds to the final system.** Averaged with LightGBM (z-scores, weight 0.5) it gives +0.0047 on test (CI excludes 0, 4,150 queries better / 3,208 worse), ten times the bge blend. This blend was chosen after the final system and its weight on val, so it is reported as an extra result; the clean way to use large is 5-fold OOF scores as a LightGBM feature group (~27 GPU hours on 2 × T4).
 
 Error analysis (`10_report`, sections 5–8):
 
