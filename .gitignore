@@ -1,10 +1,11 @@
-# raw data kept locally in the repo root; results under data/ are tracked
+# raw data kept locally in the repo root; small results under data/ are tracked
 /*.parquet
 /*.csv
 /*.zip
 __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
-# out-of-fold scores of 07_oof are large: keep them on Kaggle / ../kaggle_outputs
-data/results/scores/oof_*
-data/results/oof/
+# per-pair scores are large: kept on Kaggle and in ../kaggle_outputs
+data/results/scores/
+# written by 10_report, one row per test query
+data/report/query_deltas.csv
