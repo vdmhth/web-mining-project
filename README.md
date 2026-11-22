@@ -72,6 +72,7 @@ Two seeds of the same DeBERTa model differ by 0.0014 on test, so differences aro
 **Error analysis** (`10_report`):
 
 - **Negation queries are the hardest type:** 0.851 (final), against 0.903 for ordinary queries. Fine-tuned cross-encoders gain most there over BM25 and bi-encoders, but the re-ranker adds nothing over the large model (0.851).
+- **By query property:** the final system beats B3 in every group (+0.030 to +0.050, all CIs above 0), least for queries with a negation word (+0.030, against +0.044 without). Final nDCG is lower for queries of 6 or more words (0.887, against 0.899 to 0.901), with a negation word (0.853, against 0.902) or with a number (0.892, against 0.900); random order is lower on these lists too, so part of the gap is list difficulty. Queries that name a candidate's brand score higher (0.913, against 0.895). Details: `data/report/by_query_property.csv`.
 - **Exact and Substitute are separated better:** the gap in mean list position grows from 0.099 (BM25) to 0.195 (final).
 - **Against B3**, 1,758 queries gain more than 0.1 and 447 lose more than 0.1. The extremes are lists with one or two Exact products (56% of the 50 largest losses, against 14% of all queries), where a single swap changes nDCG a lot.
 - **Label noise:** some of the worst queries have a doubtful Exact label (e.g. "fake weed jar" → catnip).
