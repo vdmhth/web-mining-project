@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.evaluation import GAINS, RunLog, e_over_s, query_metrics, summarize   # noqa: E402
+from src.evaluation import GAINS, RunLog, calibration, e_over_s, query_metrics, summarize   # noqa: E402
 from src.text import clean_bullets, clean_text, product_text   # noqa: E402
 
 
@@ -102,6 +102,32 @@ def test_runlog_writes_json_and_scores(tmp_path=None):
     assert list(sc.columns) == ['example_id', 'query_id', 'score', 'p_E', 'p_I']
     assert (sc['example_id'].to_numpy() == sub['example_id'].to_numpy()).all()
     assert np.allclose(sc['p_E'], probs['p_E'])
+
+
+def test_calibration():
+    # perfect one-hot predictions
+    lab = np.array(list('ESCI') * 30)
+    one_hot = np.eye(4)[pd.Series(lab).map({'E': 0, 'S': 1, 'C': 2, 'I': 3})]
+    c = calibration(one_hot, lab)
+    assert c['nll'] < 1e-9 and c['brier'] == 0 and c['ece_mean'] == 0
+    # uniform predictions on balanced labels (bins of 4k pairs hold k of each label): calibrated, NLL = ln 4
+    lab = np.array(list('ESCI') * 15 * 3)
+    c = calibration(np.full((len(lab), 4), 0.25), lab)
+    assert abs(c['nll'] - round(math.log(4), 5)) < 1e-5 and abs(c['brier'] - 0.75) < 1e-9 and c['ece_mean'] == 0
+    # hand-computed, one bin
+    p = np.array([[0.7, 0.1, 0.1, 0.1], [0.2, 0.6, 0.1, 0.1]])
+    c = calibration(p, ['E', 'S'], n_bins=1)
+    assert abs(c['nll'] - round(-(math.log(0.7) + math.log(0.6)) / 2, 5)) < 1e-5
+    assert abs(c['brier'] - 0.17) < 1e-9                       # (0.09+0.01+0.01+0.01 + 0.04+0.16+0.01+0.01) / 2
+    assert abs(c['ece_E'] - 0.05) < 1e-9 and abs(c['ece_S'] - 0.15) < 1e-9 and abs(c['ece_C'] - 0.1) < 1e-9
+    # unnormalised rows are renormalised; unknown labels are rejected
+    assert calibration(p * 3, ['E', 'S'], n_bins=1) == c
+    try:
+        calibration(p, ['E', 'X'])
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError('unknown label accepted')
 
 
 def test_text():
