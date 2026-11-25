@@ -82,7 +82,8 @@ All 38 runs: `data/report/results_all.csv`. All paired tests: `data/report/paire
 ## Repository
 
 ```text
-├── proposal/    project proposal (LaTeX)
+├── proposal/    project proposal (PDF)
+├── report/      final report (PDF)
 ├── eda/         exploratory analysis: scripts, figures, tables, validation split proposal
 ├── src/         shared code: metrics and run log, text, cross-encoder training, features, data loading
 ├── tests/       tests of the metrics and features (pytest)
