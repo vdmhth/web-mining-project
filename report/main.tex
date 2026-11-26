@@ -41,9 +41,17 @@
 \titlespacing*{\paragraph}{0pt}{4pt}{0.6em}
 \emergencystretch=3em
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
-\titleformat{\chapter}[hang]{\Large\bfseries}{CHAPTER \thechapter.}{0.6em}{\MakeUppercase}
-\titlespacing*{\chapter}{0pt}{0pt}{18pt}
-\titleformat{name=\chapter,numberless}[block]{\Large\bfseries\filcenter}{}{0pt}{\MakeUppercase}
+% Headings: chapter 15pt centred, section 13pt, subsection 12pt (body text is 12pt)
+\titleformat{\chapter}[block]{\fontsize{15}{18}\selectfont\bfseries\filcenter}{CHAPTER \thechapter.}{0.5em}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{0pt}{14pt}
+\titleformat{name=\chapter,numberless}[block]{\fontsize{15}{18}\selectfont\bfseries\filcenter}{}{0pt}{\MakeUppercase}
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{14pt}
+\titleformat{\section}{\fontsize{13}{16}\selectfont\bfseries}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{10pt plus 2pt minus 2pt}{4pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{8pt plus 2pt minus 2pt}{3pt}
+% less space around tables and figures placed with [H]
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
 \renewcommand{\contentsname}{Table of Contents}
 \graphicspath{{figures/}}
 
