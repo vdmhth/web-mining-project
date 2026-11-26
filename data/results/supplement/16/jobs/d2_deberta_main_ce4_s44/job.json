@@ -1,0 +1,1 @@
+{"name": "d2_deberta_main_ce4_s44", "kind": "predict", "checkpoint": "/kaggle/input/notebooks/dattv08/15-deberta-base-e43/models/d2_deberta_main_ce4_s44", "data": "/tmp/wm_jobs_data/probe_main.parquet", "max_len": 256, "batch_size": 256, "out": "/kaggle/working/jobs/d2_deberta_main_ce4_s44"}

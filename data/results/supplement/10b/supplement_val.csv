@@ -1,0 +1,11 @@
+question,a,b,diff,ci95,per_seed,same_sign,wilcoxon_p,queries
+D2 DeBERTa-base main: ce4 vs MSE,d1_deberta_main_mse_s*,d2_deberta_main_ce4_s*,0.0018,"[-0.0004, 0.0039]","[0.0014, 0.0022]",True,6.5e-02,2089.0
+D4 MiniLM main: ce4 vs MSE,d1_minilm_main_mse_s*,d4_minilm_main_ce4_s*,-0.0036,"[-0.006, -0.001]","[-0.0023, -0.0049]",True,3.3e-02,2089.0
+D4 MiniLM main: distilled (alpha 0.5) vs MSE,d1_minilm_main_mse_s*,d4_minilm_main_kd05_s*,0.0013,"[-0.0013, 0.004]","[0.0026, -0.0001]",False,7.4e-02,2089.0
+D4 MiniLM main: distilled (alpha 0) vs MSE,d1_minilm_main_mse_s*,d4_minilm_main_kd00_s*,0.0027,"[-0.0001, 0.0057]","[0.0039, 0.0015]",True,1.3e-03,2089.0
+D4 MiniLM main: distilled (alpha 0) vs ce4 (as in notebook 14),d4_minilm_main_ce4_s*,d4_minilm_main_kd00_s*,0.0063,"[0.0042, 0.0082]","[0.0061, 0.0064]",True,3.4e-15,2089.0
+seed noise: s43 vs s42,d1_deberta_main_mse_s42,d1_deberta_main_mse_s43,-0.0001,"[-0.0029, 0.003]",,,,
+seed noise: s43 vs s42,d2_deberta_main_ce4_s42,d2_deberta_main_ce4_s43,0.0007,"[-0.0018, 0.0034]",,,,
+seed noise: s43 vs s42,d1_minilm_main_mse_s42,d1_minilm_main_mse_s43,0.0031,"[0.0015, 0.0048]",,,,
+seed noise: s43 vs s42,d4_minilm_main_ce4_s42,d4_minilm_main_ce4_s43,0.0005,"[-0.0021, 0.0029]",,,,
+seed noise: s43 vs s42,d4_minilm_main_kd00_s42,d4_minilm_main_kd00_s43,0.0007,"[-0.0015, 0.0028]",,,,

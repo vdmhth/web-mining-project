@@ -1,0 +1,16 @@
+Loading weights:   0%|          | 0/198 [00:00<?, ?it/s]Loading weights: 100%|██████████| 198/198 [00:00<00:00, 14653.50it/s]
+step   1000/11816 | loss 1.01421 | 2.0 it/s | 8.2 min, ~89 min left
+step   2000/11816 | loss 0.91967 | 2.0 it/s | 16.4 min, ~81 min left
+step   3000/11816 | loss 0.91439 | 2.0 it/s | 24.6 min, ~72 min left
+step   4000/11816 | loss 0.88175 | 2.0 it/s | 32.8 min, ~64 min left
+step   5000/11816 | loss 0.84015 | 2.0 it/s | 41.0 min, ~56 min left
+step   6000/11816 | loss 0.85679 | 2.0 it/s | 49.3 min, ~48 min left
+step   7000/11816 | loss 0.83141 | 2.0 it/s | 57.5 min, ~40 min left
+step   8000/11816 | loss 0.84833 | 2.0 it/s | 65.7 min, ~31 min left
+step   9000/11816 | loss 0.82973 | 2.0 it/s | 73.9 min, ~23 min left
+step  10000/11816 | loss 0.80519 | 2.0 it/s | 82.1 min, ~15 min left
+step  11000/11816 | loss 0.78497 | 2.0 it/s | 90.4 min, ~7 min left
+step  11816/11816 | loss 0.77568 | 2.0 it/s | 97.1 min, ~0 min left
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
+checkpoint saved: /kaggle/working/models/d2_deberta_main_ce4_s46
+Loading weights:   0%|          | 0/202 [00:00<?, ?it/s]Loading weights: 100%|██████████| 202/202 [00:00<00:00, 5627.77it/s]

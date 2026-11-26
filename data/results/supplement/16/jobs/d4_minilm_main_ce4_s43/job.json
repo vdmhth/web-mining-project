@@ -1,0 +1,1 @@
+{"name": "d4_minilm_main_ce4_s43", "kind": "predict", "checkpoint": "/kaggle/input/notebooks/dattv08/14-distill/models/d4_minilm_main_ce4_s43", "data": "/tmp/wm_jobs_data/probe_main.parquet", "max_len": 256, "batch_size": 256, "out": "/kaggle/working/jobs/d4_minilm_main_ce4_s43"}

@@ -1,0 +1,14 @@
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5714.78it/s]
+step   1000/12092 | loss 1.28833 | 19.6 it/s | 0.9 min, ~9 min left
+step   2000/12092 | loss 1.21385 | 19.7 it/s | 1.7 min, ~9 min left
+step   3000/12092 | loss 1.11887 | 19.8 it/s | 2.5 min, ~8 min left
+step   4000/12092 | loss 1.06523 | 19.8 it/s | 3.4 min, ~7 min left
+step   5000/12092 | loss 1.03886 | 19.8 it/s | 4.2 min, ~6 min left
+step   6000/12092 | loss 1.04711 | 19.9 it/s | 5.0 min, ~5 min left
+step   7000/12092 | loss 1.01152 | 19.9 it/s | 5.9 min, ~4 min left
+step   8000/12092 | loss 1.05467 | 19.9 it/s | 6.7 min, ~3 min left
+step   9000/12092 | loss 0.98419 | 19.9 it/s | 7.5 min, ~3 min left
+step  10000/12092 | loss 1.06204 | 19.9 it/s | 8.4 min, ~2 min left
+step  11000/12092 | loss 1.04207 | 19.9 it/s | 9.2 min, ~1 min left
+step  12000/12092 | loss 1.03706 | 19.9 it/s | 10.0 min, ~0 min left
+step  12092/12092 | loss 0.99331 | 19.9 it/s | 10.1 min, ~0 min left

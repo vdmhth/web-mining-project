@@ -1,0 +1,16 @@
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:   6%|▌         | 12/201 [00:00<00:03, 61.54it/s]Loading weights:   9%|▉         | 19/201 [00:00<00:03, 45.76it/s]Loading weights:  12%|█▏        | 24/201 [00:00<00:05, 30.98it/s]Loading weights:  15%|█▍        | 30/201 [00:01<00:07, 21.87it/s]Loading weights:  19%|█▉        | 39/201 [00:01<00:05, 30.82it/s]Loading weights:  26%|██▌       | 52/201 [00:01<00:04, 36.95it/s]Loading weights:  28%|██▊       | 57/201 [00:01<00:04, 32.13it/s]Loading weights:  31%|███       | 62/201 [00:01<00:04, 33.77it/s]Loading weights:  33%|███▎      | 66/201 [00:01<00:04, 32.97it/s]Loading weights:  43%|████▎     | 87/201 [00:02<00:02, 48.51it/s]Loading weights:  46%|████▌     | 92/201 [00:02<00:02, 41.99it/s]Loading weights:  49%|████▉     | 99/201 [00:02<00:02, 43.43it/s]Loading weights:  53%|█████▎    | 106/201 [00:02<00:02, 33.80it/s]Loading weights:  55%|█████▍    | 110/201 [00:03<00:02, 30.97it/s]Loading weights:  58%|█████▊    | 117/201 [00:03<00:02, 32.03it/s]Loading weights:  60%|██████    | 121/201 [00:03<00:03, 22.81it/s]Loading weights:  63%|██████▎   | 127/201 [00:03<00:02, 25.15it/s]Loading weights:  65%|██████▍   | 130/201 [00:04<00:03, 23.32it/s]Loading weights:  69%|██████▊   | 138/201 [00:04<00:02, 29.05it/s]Loading weights:  75%|███████▍  | 150/201 [00:04<00:01, 35.71it/s]Loading weights:  77%|███████▋  | 154/201 [00:04<00:01, 25.57it/s]Loading weights:  79%|███████▊  | 158/201 [00:05<00:01, 25.65it/s]Loading weights:  82%|████████▏ | 164/201 [00:05<00:01, 31.01it/s]Loading weights:  87%|████████▋ | 174/201 [00:05<00:00, 38.04it/s]Loading weights:  89%|████████▉ | 179/201 [00:05<00:00, 29.83it/s]Loading weights:  91%|█████████ | 183/201 [00:05<00:00, 24.23it/s]Loading weights: 100%|██████████| 201/201 [00:05<00:00, 34.29it/s]
+/kaggle/input/datasets/vantue/wm-src/src/cross_encoder.py:262: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+step   1000/12098 | loss 0.54444 | 19.1 it/s | 0.9 min, ~10 min left
+step   2000/12098 | loss 0.22712 | 19.5 it/s | 1.7 min, ~9 min left
+step   3000/12098 | loss 0.20233 | 19.6 it/s | 2.5 min, ~8 min left
+step   4000/12098 | loss 0.20186 | 19.7 it/s | 3.4 min, ~7 min left
+step   5000/12098 | loss 0.20604 | 19.7 it/s | 4.2 min, ~6 min left
+step   6000/12098 | loss 0.19744 | 19.7 it/s | 5.1 min, ~5 min left
+step   7000/12098 | loss 0.19230 | 19.7 it/s | 5.9 min, ~4 min left
+step   8000/12098 | loss 0.19691 | 19.8 it/s | 6.7 min, ~3 min left
+step   9000/12098 | loss 0.18016 | 19.8 it/s | 7.6 min, ~3 min left
+step  10000/12098 | loss 0.19468 | 19.8 it/s | 8.4 min, ~2 min left
+step  11000/12098 | loss 0.19196 | 19.8 it/s | 9.3 min, ~1 min left
+step  12000/12098 | loss 0.18528 | 19.8 it/s | 10.1 min, ~0 min left
+step  12098/12098 | loss 0.17494 | 19.8 it/s | 10.2 min, ~0 min left
