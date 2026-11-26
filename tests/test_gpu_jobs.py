@@ -52,6 +52,33 @@ def test_model_source():
         d.mkdir(parents=True)
         (d / 'config.json').write_text('{}')
         assert Path(model_source('org/other-model', root)) == d
+        flat = Path(root) / 'uploaded' / 'org__flat-model'                        # dataset uploaded without hf_models/
+        flat.mkdir(parents=True)
+        (flat / 'config.json').write_text('{}')
+        assert Path(model_source('org/flat-model', root)) == flat
+        cache = Path(root) / 'cache' / 'models--org--cache-model' / 'snapshots' / 'abc123'   # Hugging Face cache layout
+        cache.mkdir(parents=True)
+        for f in ('config.json', 'tokenizer_config.json'):
+            (cache / f).write_text('{}')
+        assert Path(model_source('org/cache-model', root)) == cache
+        plain = Path(root) / 'x' / 'Plain-Model'                                   # only the model name, any case
+        plain.mkdir(parents=True)
+        for f in ('config.json', 'tokenizer_config.json'):
+            (plain / f).write_text('{}')
+        assert Path(model_source('org/plain-model', root)) == plain
+        assert model_source('org/plain-model-large', root) == 'org/plain-model-large'   # no false match
+
+
+def test_runlog_load_any_folder():
+    import numpy as np, pandas as pd
+    from src.evaluation import RunLog
+    part = pd.DataFrame({'example_id': range(4), 'query_id': [1, 1, 2, 2], 'esci_label': ['E', 'I', 'S', 'E'],
+                         'gain': [1.0, 0.0, 0.1, 1.0]})
+    with tempfile.TemporaryDirectory() as root:
+        log = RunLog(Path(root) / 'res', {'val': part})
+        assert not log.load('run_a', splits=['val'], root=root)
+        pd.DataFrame({'example_id': range(4), 'score': np.arange(4.0)}).to_parquet(Path(root) / 'run_a_val.parquet')
+        assert log.load('run_a', splits=['val'], root=root)                        # no scores/ folder
 
 
 if __name__ == '__main__':

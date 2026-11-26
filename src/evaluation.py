@@ -206,7 +206,8 @@ class RunLog:
     def load(self, run, splits=None, root='/kaggle/input'):
         # Per-query metrics of a run saved earlier (e.g. an attached notebook output); False if its scores are missing.
         for split in splits or list(self.parts):
-            hits = glob.glob(f'{root}/**/scores/{run}_{split}.parquet', recursive=True)
+            hits = (glob.glob(f'{root}/**/scores/{run}_{split}.parquet', recursive=True)
+                    or glob.glob(f'{root}/**/{run}_{split}.parquet', recursive=True))
             if not hits:
                 return False
             part = self.parts[split]

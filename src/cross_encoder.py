@@ -47,10 +47,21 @@ CLASS_GAIN = [GAINS['official'][l] for l in LABELS]
 
 @functools.lru_cache(maxsize=None)
 def model_source(name, root='/kaggle/input'):
-    """Folder of a local copy of Hub model `name` (hf_models/<org>__<model>/ in the inputs), else `name` itself."""
+    """Folder of a local copy of Hub model `name` in the inputs, else `name` itself.
+
+    Looks for hf_models/<org>__<model>/ (notebook 00), then <org>__<model>/ anywhere, then any folder with a
+    config.json and a tokenizer_config.json whose path has a part ending in <model> (e.g. deberta-v3-base/, or
+    models--microsoft--deberta-v3-base/snapshots/<hash>/ from a Hugging Face cache)."""
     if Path(name).is_dir():
         return name
-    hits = sorted(glob.glob(f"{root}/**/hf_models/{name.replace('/', '__')}/config.json", recursive=True))
+    folder = name.replace('/', '__')
+    hits = (sorted(glob.glob(f"{root}/**/hf_models/{folder}/config.json", recursive=True))
+            or sorted(glob.glob(f"{root}/**/{folder}/config.json", recursive=True)))
+    if not hits:
+        last = name.split('/')[-1].lower()
+        hits = sorted(h for h in glob.glob(f"{root}/**/config.json", recursive=True)
+                      if Path(h).with_name('tokenizer_config.json').exists()
+                      and any(p.lower().endswith(last) for p in Path(h).parent.relative_to(root).parts))
     return str(Path(hits[0]).parent) if hits else name
 
 
