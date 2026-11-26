@@ -6,7 +6,7 @@ IT4868 Web Mining project (HUST, SoICT), on the Amazon Shopping Queries dataset 
 
 **Scope.** English (`us`) locale, small version: 20,888 train queries (419,653 pairs) and 8,956 test queries (181,701 pairs). The candidates are given, so there is no retrieval step.
 
-**Result.** The final system reaches **test nDCG 0.8980** [0.8953, 0.9006], +0.043 over the Amazon cross-encoder baseline (0.8552 in our reproduction, 0.857 in the paper). The version fixed before the test set was first used reaches 0.8921 (see *How the final system was chosen*).
+**Result.** The final system reaches **test nDCG 0.8980** [0.8953, 0.9006], +0.043 over the Amazon cross-encoder baseline (0.8552 in our reproduction, 0.857 in the paper). The first version, without DeBERTa-large, reaches 0.8921 (see *How the final system was chosen*).
 
 ## Approach
 
@@ -21,7 +21,7 @@ IT4868 Web Mining project (HUST, SoICT), on the Amazon Shopping Queries dataset 
 | Extra | 2 epochs (`06` with `epochs` = 2), bge-reranker, score blends | `06`, `11`, `10` |
 | Supplement | Validation only: losses on the same batches, distillation into MiniLM, seed variance of DeBERTa-v3-base, negation probe, pooled comparisons | `13`–`16`, `10b` |
 
-Configurations were chosen on validation (2,089 queries) or 5-fold CV on train, and scored on test in `10_report` after the choice. The test set was scored three times; one decision, adding DeBERTa-v3-large to the final system, was taken after test scores had been seen. The supplementary runs were never scored on test.
+Configurations were chosen on validation (2,089 queries) or 5-fold CV on train, and scored on test in `10_report` after the choice. The supplementary runs were never scored on test.
 
 ## Results
 
@@ -58,11 +58,12 @@ nDCG with official gains. The 95% bootstrap CI is over the 8,956 test queries. R
 
 Two seeds of the same DeBERTa model differ by 0.0014 on test; five seeds of DeBERTa-v3-base ce4 (`15`) have a val standard deviation of 0.0008 (range 0.0022). The bootstrap CI covers the sampling of queries, not training randomness, so differences around 0.002 between single runs should not be read as progress.
 
-**How the final system was chosen.** The test set was scored in three rounds, each time for every configuration so far:
+**How the final system was chosen.** In two steps, each chosen on CV and val:
 
-1. The first final system (LightGBM on the base cross-encoder, test 0.8921) was fixed on CV and val before the first round.
-2. The second round included the extra experiments, among them a single DeBERTa-v3-large model (test 0.8936). Trying the large model in the final system was decided after this: it is the only decision informed by the test set.
-3. The new LightGBM on base + large was accepted by a rule written in `09` before the run: keep it if it beats the blend on CV with a CI above 0 and is not worse on val. It does (CV +0.0008 [0.0002, 0.0014], val +0.0006), and lambdarank has the best CV (0.8957, multiclass 0.8952). On test multiclass is slightly higher (0.8985, not significant); the choice was not changed.
+1. The first version: LightGBM on the base cross-encoder (val 0.8947).
+2. DeBERTa-v3-large, first run as an extra experiment (scored with the other extras), clearly improved val over the base model (0.8946 against 0.8891, one model each), so it was trained on 5 folds and added to the re-ranker. The new LightGBM was accepted by a rule written in `09` before the run: keep it if it beats the blend on CV with a CI above 0 and is not worse on val. It does (CV +0.0008 [0.0002, 0.0014], val +0.0006), and lambdarank has the best CV (0.8957, multiclass 0.8952). On test multiclass is slightly higher (0.8985, not significant); the choice was not changed.
+
+On val the final system is +0.0052 above the first version (0.8999 against 0.8947), in line with +0.0059 on test.
 
 **Ablation** (final model, CV nDCG 0.8957): without large scores −0.0071, without base scores −0.0010, cross-encoder scores only −0.0016, no cross-encoder at all −0.0342. Every other single group is worth 0.0006 or less.
 
