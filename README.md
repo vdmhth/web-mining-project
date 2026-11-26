@@ -6,7 +6,7 @@ IT4868 Web Mining project (HUST, SoICT), on the Amazon Shopping Queries dataset 
 
 **Scope.** English (`us`) locale, small version: 20,888 train queries (419,653 pairs) and 8,956 test queries (181,701 pairs). The candidates are given, so there is no retrieval step.
 
-**Result.** The final system reaches **test nDCG 0.8980** [0.8953, 0.9006], +0.043 over the Amazon cross-encoder baseline (0.8552 in our reproduction, 0.857 in the paper).
+**Result.** The final system reaches **test nDCG 0.8980** [0.8953, 0.9006], +0.043 over the Amazon cross-encoder baseline (0.8552 in our reproduction, 0.857 in the paper). The version fixed before the test set was first used reaches 0.8921 (see *How the final system was chosen*).
 
 ## Approach
 
@@ -19,8 +19,9 @@ IT4868 Web Mining project (HUST, SoICT), on the Amazon Shopping Queries dataset 
 | D3 | LightGBM re-ranker on out-of-fold scores of two cross-encoders (DeBERTa-v3-base and -large), list-level, lexical and bi-encoder features | `07`–`09`, `12` |
 | Report | Test scores, paired tests, error analysis | `10` |
 | Extra | 2 epochs (`06` with `epochs` = 2), bge-reranker, score blends | `06`, `11`, `10` |
+| Supplement | Validation only: losses on the same batches, distillation into MiniLM, seed variance of DeBERTa-v3-base, negation probe, pooled comparisons | `13`–`16`, `10b` |
 
-Configurations were chosen on validation (2,089 queries) or 5-fold CV on train, and scored on test in `10_report` after the choice.
+Configurations were chosen on validation (2,089 queries) or 5-fold CV on train, and scored on test in `10_report` after the choice. The test set was scored three times; one decision, adding DeBERTa-v3-large to the final system, was taken after test scores had been seen. The supplementary runs were never scored on test.
 
 ## Results
 
@@ -55,9 +56,13 @@ nDCG with official gains. The 95% bootstrap CI is over the 8,956 test queries. R
 | D3: final vs first version | +0.0059 [0.0047, 0.0072] | Gain from the large model |
 | D3: final vs blend of first version and large | +0.0005 [−0.0002, 0.0013] | Not significant on test |
 
-Two seeds of the same DeBERTa model differ by 0.0014 on test, so differences around 0.001 should not be read as progress.
+Two seeds of the same DeBERTa model differ by 0.0014 on test; five seeds of DeBERTa-v3-base ce4 (`15`) have a val standard deviation of 0.0008 (range 0.0022). The bootstrap CI covers the sampling of queries, not training randomness, so differences around 0.002 between single runs should not be read as progress.
 
-**How the final system was chosen.** The rule was written in `09` before the run: keep the new LightGBM if it beats the blend on CV with a CI above 0 and is not worse on val. It does (CV +0.0008 [0.0002, 0.0014], val +0.0006), and lambdarank has the best CV (0.8957, multiclass 0.8952). On test multiclass is slightly higher (0.8985, not significant); the choice was not changed. Test scores of the first version and of the single large model were known before the large model was added to `08` and `09`.
+**How the final system was chosen.** The test set was scored in three rounds, each time for every configuration so far:
+
+1. The first final system (LightGBM on the base cross-encoder, test 0.8921) was fixed on CV and val before the first round.
+2. The second round included the extra experiments, among them a single DeBERTa-v3-large model (test 0.8936). Trying the large model in the final system was decided after this: it is the only decision informed by the test set.
+3. The new LightGBM on base + large was accepted by a rule written in `09` before the run: keep it if it beats the blend on CV with a CI above 0 and is not worse on val. It does (CV +0.0008 [0.0002, 0.0014], val +0.0006), and lambdarank has the best CV (0.8957, multiclass 0.8952). On test multiclass is slightly higher (0.8985, not significant); the choice was not changed.
 
 **Ablation** (final model, CV nDCG 0.8957): without large scores −0.0071, without base scores −0.0010, cross-encoder scores only −0.0016, no cross-encoder at all −0.0342. Every other single group is worth 0.0006 or less.
 
@@ -79,17 +84,33 @@ Two seeds of the same DeBERTa model differ by 0.0014 on test, so differences aro
 
 All 38 runs: `data/report/results_all.csv`. All paired tests: `data/report/paired_tests.csv`.
 
+## Supplementary experiments (validation only)
+
+Run after the final system was fixed, to check the conclusions above; not scored on test. Pooled comparisons: per query, the mean over seeds of (b − a), 95% bootstrap CI over the 2,089 val queries. Results: `data/results/supplement/`.
+
+| Notebook | Question | Result (val) |
+| --- | --- | --- |
+| `13_d2b_sampler` | Do the losses rank the same when all three see the same batches (whole queries), MiniLM `title`, 4 seeds? | ListNet − MSE +0.0036 [0.0014, 0.0057], 4/4 seeds; ce4 − MSE −0.0014 (n.s.). But whole-query batches lower MSE by 0.0027 and ce4 by 0.0032 against random batches, while ListNet is unchanged: most of ListNet's edge comes from the batching |
+| `14_distill` | How much of the gap to DeBERTa-large does a MiniLM recover when trained on the large model's out-of-fold probabilities? | kd00 (teacher only) − ce4 +0.0063 [0.0042, 0.0082]; kd00 − MSE +0.0027 [−0.0001, 0.0057] (`10b`). About 10% of the gap between MiniLM MSE and the teacher; ECE worse (0.025 → 0.04) |
+| `15_deberta_base_s43` | Seed variance of DeBERTa-v3-base ce4 (seeds 42–46), with saved checkpoints | Val 0.8877–0.8899, standard deviation 0.0008 |
+| `16_negation_probe` | Do the models read "without Y"? 129 hand-checked val queries scored as written, without the negated phrase, with "with Y" and with "no Y" | Every model reacts: products containing Y are scored lower in 72–88% of cases (0.5 = ignored); DeBERTa-v3-base raises products that say "no Y" in 92–96% of cases, MiniLM in 71%. Keeping the negation is worth +0.04 to +0.07 nDCG under the real labels, so the labels reward it. DeBERTa-large and the final system have no saved weights and are not probed |
+| `10b_supplement_val` | Pooled comparisons over seeds 42 and 43 | DeBERTa-v3-base ce4 − MSE +0.0018 [−0.0004, 0.0039] (both seeds positive); MiniLM `main` ce4 − MSE −0.0036 [−0.0060, −0.0010]; two MiniLM MSE seeds differ by 0.0031 [0.0015, 0.0048] |
+
+**Reading:** the training loss matters little (all differences below 0.004, close to seed variation, and the best loss depends on the model); distillation clearly beats ce4 but not MSE beyond seed noise; models of base size do react to negations, so the weakness on negation queries is not simply the model ignoring them.
+
 ## Repository
 
 ```text
 ├── proposal/    project proposal (LaTeX)
 ├── eda/         exploratory analysis: scripts, figures, tables, validation split proposal
-├── src/         shared code: metrics and run log, text, cross-encoder training, features, data loading
-├── tests/       tests of the metrics and features (pytest)
-├── notebooks/   01–12, one per step
+├── src/         shared code: metrics and run log, text, cross-encoder training, features, data loading,
+│                parallel GPU jobs (gpu_jobs.py), negation variants (probes.py)
+├── tests/       tests of the metrics, features and GPU jobs (pytest)
+├── notebooks/   00–16 and 10b, one per step
 └── data/
     ├── splits/  train/val/test split, data checks
-    ├── results/ one json per run (settings, time, metrics), D3 tables; folds/ = one json per fold model
+    ├── results/ one json per run (settings, time, metrics), D3 tables; folds/ = one json per fold model;
+    │            supplement/ = outputs of 10b and 13–16 (val only)
     └── report/  final tables written by 10_report
 ```
 
@@ -111,4 +132,19 @@ All 38 runs: `data/report/results_all.csv`. All paired tests: `data/report/paire
 
 `05` and `06` choose the settings used in `07` and `12`. `10` also reads the scores of every run, including `03` and `11`.
 
-Not in the repository because of size: the raw data ([amazon-science/esci-data](https://github.com/amazon-science/esci-data), Apache-2.0), per-pair scores of the runs, out-of-fold scores and the feature table.
+Supplementary notebooks (validation only):
+
+```text
+00 Hugging Face models (CPU, Internet on: lets the GPU notebooks run offline)
+01 Preprocess
+ ├─► 13 Losses on the same batches (MiniLM title, 4 seeds) ◄─ 03, 06 (scores, for D2b vs D2a)
+ ├─► 14 Distillation into MiniLM ◄─ 12 (out-of-fold teacher probabilities) ──► checkpoints ─┐
+ ├─► 15 DeBERTa-v3-base ce4, seeds 43–46 ◄─ 05, 06 (scores) ───────────────────► checkpoints ─┤
+ │                                                                                            ▼
+ ├─► 16 Negation probe (hand-checked query list data/results/supplement/16/) ◄────────────────┘
+ └─► 10b Pooled comparisons over seeds ◄─ scores of 05, 06, 14, 15
+```
+
+`13`–`16` train or score several runs at once, one per GPU (`src/gpu_jobs.py`); each notebook finds its inputs by file name anywhere under `/kaggle/input`. `16` first runs with `MODE = 'prepare'` (CPU) to write the candidate queries, which are checked by hand before the `smoke` and `full` runs.
+
+Not in the repository because of size: the raw data ([amazon-science/esci-data](https://github.com/amazon-science/esci-data), Apache-2.0), per-pair scores of the runs, out-of-fold scores, the feature table and the model checkpoints of `14` and `15`.
