@@ -1,0 +1,16 @@
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5674.23it/s]
+/kaggle/input/datasets/vantue/wm-src/src/cross_encoder.py:262: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+step   1000/12105 | loss 3.40164 | 18.9 it/s | 0.9 min, ~10 min left
+step   2000/12105 | loss 2.96703 | 19.0 it/s | 1.8 min, ~9 min left
+step   3000/12105 | loss 2.92477 | 19.0 it/s | 2.6 min, ~8 min left
+step   4000/12105 | loss 2.94707 | 19.1 it/s | 3.5 min, ~7 min left
+step   5000/12105 | loss 2.92750 | 19.1 it/s | 4.4 min, ~6 min left
+step   6000/12105 | loss 3.00905 | 19.1 it/s | 5.2 min, ~5 min left
+step   7000/12105 | loss 2.89166 | 19.1 it/s | 6.1 min, ~4 min left
+step   8000/12105 | loss 2.92990 | 19.1 it/s | 7.0 min, ~4 min left
+step   9000/12105 | loss 2.97572 | 19.1 it/s | 7.9 min, ~3 min left
+step  10000/12105 | loss 2.96697 | 19.1 it/s | 8.7 min, ~2 min left
+step  11000/12105 | loss 2.95636 | 19.1 it/s | 9.6 min, ~1 min left
+step  12000/12105 | loss 2.93620 | 19.1 it/s | 10.5 min, ~0 min left
+step  12105/12105 | loss 2.83955 | 19.1 it/s | 10.6 min, ~0 min left

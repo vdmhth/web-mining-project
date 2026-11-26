@@ -1,0 +1,15 @@
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5290.26it/s]
+step   1000/11816 | loss 1.24782 | 10.4 it/s | 1.6 min, ~17 min left
+step   2000/11816 | loss 1.09914 | 10.3 it/s | 3.2 min, ~16 min left
+step   3000/11816 | loss 1.08275 | 10.3 it/s | 4.8 min, ~14 min left
+step   4000/11816 | loss 1.04821 | 10.3 it/s | 6.5 min, ~13 min left
+step   5000/11816 | loss 0.99766 | 10.3 it/s | 8.1 min, ~11 min left
+step   6000/11816 | loss 0.98530 | 10.2 it/s | 9.8 min, ~9 min left
+step   7000/11816 | loss 0.97156 | 10.2 it/s | 11.4 min, ~8 min left
+step   8000/11816 | loss 0.97931 | 10.2 it/s | 13.1 min, ~6 min left
+step   9000/11816 | loss 0.94882 | 10.2 it/s | 14.8 min, ~5 min left
+step  10000/11816 | loss 0.94925 | 10.1 it/s | 16.4 min, ~3 min left
+step  11000/11816 | loss 0.97171 | 10.1 it/s | 18.1 min, ~1 min left
+step  11816/11816 | loss 0.93617 | 10.1 it/s | 19.5 min, ~0 min left
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 12.43it/s]
+checkpoint saved: /kaggle/working/models/d4_minilm_main_ce4_s42

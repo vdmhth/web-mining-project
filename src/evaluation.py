@@ -89,6 +89,26 @@ def e_over_s(df, score):
     return float(u.sum() / (agg['n_e'] * agg['n_s']).sum())
 
 
+def calibration(probs, labels, classes=('E', 'S', 'C', 'I'), n_bins=15):
+    """Calibration of 4-class probabilities (supplement R4): multiclass NLL, multiclass Brier score (sum over the
+    classes, mean over pairs) and classwise ECE. For each class c the pairs are sorted by P(c) and cut into `n_bins`
+    equal-mass bins; ECE_c = sum over bins of (bin size / N) * |mean P(c) - share of pairs labelled c|.
+    probs: (n, 4) array or DataFrame in `classes` order (rows are renormalised); labels: E/S/C/I per pair."""
+    p = np.asarray(probs, dtype=float)
+    p = p / p.sum(1, keepdims=True)
+    code = pd.Series(np.asarray(labels)).map({c: i for i, c in enumerate(classes)})
+    assert code.notna().all(), f'labels must be in {classes}'
+    y = np.eye(len(classes))[code.to_numpy(int)]
+    out = {'nll': float(-np.log(np.clip((p * y).sum(1), 1e-12, None)).mean()),
+           'brier': float(((p - y) ** 2).sum(1).mean())}
+    for i, c in enumerate(classes):
+        order = np.argsort(p[:, i], kind='stable')
+        out[f'ece_{c}'] = float(sum(len(b) * abs(p[b, i].mean() - y[b, i].mean())
+                                    for b in np.array_split(order, n_bins) if len(b)) / len(p))
+    out['ece_mean'] = float(np.mean([out[f'ece_{c}'] for c in classes]))
+    return {k: round(v, 5) for k, v in out.items()}
+
+
 def bootstrap_ci(x, n_boot=1000, seed=SEED):
     x = np.asarray(x, dtype=float)
     means = x[np.random.default_rng(seed).integers(0, len(x), (n_boot, len(x)))].mean(axis=1)
@@ -186,7 +206,8 @@ class RunLog:
     def load(self, run, splits=None, root='/kaggle/input'):
         # Per-query metrics of a run saved earlier (e.g. an attached notebook output); False if its scores are missing.
         for split in splits or list(self.parts):
-            hits = glob.glob(f'{root}/**/scores/{run}_{split}.parquet', recursive=True)
+            hits = (glob.glob(f'{root}/**/scores/{run}_{split}.parquet', recursive=True)
+                    or glob.glob(f'{root}/**/{run}_{split}.parquet', recursive=True))
             if not hits:
                 return False
             part = self.parts[split]

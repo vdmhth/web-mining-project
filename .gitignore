@@ -9,3 +9,4 @@ __pycache__/
 data/results/scores/
 # written by 10_report, one row per test query
 data/report/query_deltas.csv
+data/results/supplement/**/*.parquet
