@@ -21,9 +21,15 @@ Optional cfg keys added on the supplement branch (defaults keep every earlier ru
   lists from `query_batches`; always used by listnet). With 'query', every loss sees the same kind of batch.
 - `list_size`: maximum list length for 'query' batches (default 16, as in D2); None keeps every query whole.
 - `warmup_ratio`: warm-up as a share of all steps; without it, warm-up = min(warmup_steps, 0.42 * steps).
+
+Models are loaded from a local copy in the inputs when one is attached (`model_source`, notebook 00_hf_models), else
+from the Hugging Face Hub; cfg['model'] (and so every run's json) keeps the Hub name.
 """
+import functools
+import glob
 import random
 import time
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -37,6 +43,15 @@ from .evaluation import GAINS, summarize
 DEVICE = 'cuda'
 LABELS = ('E', 'S', 'C', 'I')                      # class order of the 'ce4' head
 CLASS_GAIN = [GAINS['official'][l] for l in LABELS]
+
+
+@functools.lru_cache(maxsize=None)
+def model_source(name, root='/kaggle/input'):
+    """Folder of a local copy of Hub model `name` (hf_models/<org>__<model>/ in the inputs), else `name` itself."""
+    if Path(name).is_dir():
+        return name
+    hits = sorted(glob.glob(f"{root}/**/hf_models/{name.replace('/', '__')}/config.json", recursive=True))
+    return str(Path(hits[0]).parent) if hits else name
 
 
 def set_seed(seed):
@@ -197,12 +212,13 @@ def train_ce(cfg, train_df, seed, eval_df=None, eval_every=None, print_every=100
     # Trains for cfg['epochs'] and returns the model after the last step (no early stopping, as in Amazon's script).
     # eval_df is scored every `eval_every` steps only to record the val curve.
     set_seed(seed)
-    tokenizer = AutoTokenizer.from_pretrained(cfg['model'])
+    src = model_source(cfg['model'])
+    tokenizer = AutoTokenizer.from_pretrained(src)
     if cfg['loss'] in ('ce4', 'ce4_soft'):
-        model = AutoModelForSequenceClassification.from_pretrained(cfg['model'], num_labels=len(LABELS),
+        model = AutoModelForSequenceClassification.from_pretrained(src, num_labels=len(LABELS),
                                                                    ignore_mismatched_sizes=True)
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(cfg['model'], num_labels=1)
+        model = AutoModelForSequenceClassification.from_pretrained(src, num_labels=1)
     model = model.float().to(DEVICE)
     q, t = train_df['query'].to_numpy(), train_df['text'].to_numpy()
     y = make_targets(train_df, cfg)

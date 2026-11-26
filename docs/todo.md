@@ -20,18 +20,19 @@ Chi tiết từng mục: `docs/continue.md` (mã R*, N*) và `docs/plan_training
 - [ ] Kiểm tra output của `12_deberta_large_t4x2` ở mode `assemble` (`ce_debertalarge_main_ce4.parquet`) còn trên Kaggle, vì notebook 14 cần file này
 - [ ] (Tùy chọn) Chạy lại `03_cross_encoder` với `SAVE_MODEL = True` (khoảng 15 phút) để có checkpoint B3 cho notebook 16 và 17
 
-## 2. Chạy GPU (1 × T4, trừ khi ghi khác)
+## 2. Chạy GPU (nhiều GPU: `src/gpu_jobs.py` chạy mỗi run trên một GPU, song song)
 
-| | Notebook | Thẻ | Thứ tự chạy | Phụ thuộc | Thời gian |
+| | Notebook | Thẻ | Thứ tự chạy | Phụ thuộc | Số run |
 |---|---|---|---|---|---|
-| [ ] | `13_d2b_sampler` | T1 / R5 | smoke → full | không | ~2.3 h |
-| [ ] | `14_distill` | T2 / N3-B | smoke → full `STAGE='s42'` → đặt `KD_BEST` → full `STAGE='s43'` | output 12 assemble | ~2.3 + 1.5 h |
-| [ ] | `15_deberta_base_s43` | T3 | smoke → full | không | ~2.8 h |
-| [ ] | `16_negation_probe` | T4 / N1-B | `prepare` (CPU) → **lọc tay** ra `negation_probe_queries.csv` → smoke → full | checkpoint của 14, 15 (và B3 nếu có) | ~0.5 h |
-| [ ] | `17_easy_holdout` *(chưa viết)* | T5 / N4 | bước 1 chốt mẫu 3.000 query, **commit trước** → bước 2 chấm, **chỉ chấm một lần, sau 29/11** | checkpoint của 14, 15 | ~1 h, Internet on |
-| [ ] | `19_llm_rerank` *(chưa viết, tùy chọn)* | T7 / N5 | chỉ làm khi T1–T5 xong và còn quota | query list của 16 | ~1.5 h, **2 × T4** |
+| [ ] | `00_hf_models` *(tùy chọn)* | | CPU, Internet on; chỉ cần nếu session GPU không có Internet | không | |
+| [ ] | `13_d2b_sampler` | T1 / R5 | smoke → full | không | 12 (3 loss × seed 42–45) |
+| [ ] | `14_distill` | T2 / N3-B | smoke → full (một lần, không còn `STAGE`/`KD_BEST`) | output 12 assemble | 6 (ce4, kd05, kd00 × seed 42, 43) |
+| [ ] | `15_deberta_base_s43` | T3 | smoke → full | không | 4 (seed 43–46), đo nhiễu seed của DeBERTa-base |
+| [ ] | `16_negation_probe` | T4 / N1-B | `prepare` (CPU) → **lọc tay** ra `negation_probe_queries.csv` → smoke → full | checkpoint của 14, 15 (và B3 nếu có) | tối đa 11 checkpoint |
+| [ ] | `17_easy_holdout` *(chưa viết)* | T5 / N4 | bước 1 chốt mẫu 3.000 query, **commit trước** → bước 2 chấm, **chỉ chấm một lần, sau 29/11** | checkpoint của 14, 15 | |
+| [ ] | `19_llm_rerank` *(chưa viết, tùy chọn)* | T7 / N5 | chỉ làm khi T1–T5 xong và còn quota | query list của 16 | |
 
-13, 14, 15 chạy song song được trên 3 tài khoản. Sau mỗi run: tải `results/supplement/` về và commit kèm tên version Kaggle.
+Không đổi batch size hay hyperparameter nào. Đổi GPU chỉ ảnh hưởng thời gian: số `gpu_ms_per_1k_pairs` của notebook 14 không so được với các run cũ, nên notebook 18 sẽ đo lại thời gian của mọi model trên cùng một GPU. Sau mỗi run: tải `results/` về `data/results/supplement/` và commit kèm tên version Kaggle.
 
 ## 3. Phân tích CPU
 
